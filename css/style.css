@@ -258,7 +258,9 @@ nav ul li a {
     nav ul li a {
         color: white;
         background-color: inherit;
+        /*bug?
         text-align: right;
+        */
         padding: 1em 2em;
     }
 
