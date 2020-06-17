@@ -35,6 +35,9 @@ header {
     display: none;
 }
 
+nav{
+    height: 50px;
+}
 
 .cta {
     background: #FFA800;
@@ -96,6 +99,7 @@ nav ul li a {
 /*size changes*/
 .logo {
     width: 150px;
+    margin-top:5px;
 }
 
 .menu {
@@ -354,10 +358,7 @@ form .get-quote input {
     
 
     .h1-quote {
-        border: none;
-        text-align: left;
-        margin: 40px 0 0 4.8%;
-
+        margin: 50px 0 30px 4.8%;
     }
 
     .get-quote h3 {
