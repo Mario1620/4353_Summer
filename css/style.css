@@ -281,13 +281,13 @@ nav ul li a {
     padding: 10px 0px;
 }
 
-.get-quote form label {
+form .get-quote label {
     font-size: 21px;
     display: block;
     margin: 30px auto;
 }
 
-.get-quote form input {
+form .get-quote input {
     text-align: center;
     width: 50%;
     display: block;
@@ -338,7 +338,7 @@ nav ul li a {
         width: 60%;
     }
 
-    .get-quote form input {
+    form .get-quote input {
         margin: 30px 0px;
     }
 
@@ -365,7 +365,7 @@ nav ul li a {
         font-size: 30px;
     }
 
-    .get-quote form input {
+    form .get-quote input {
         width: 250px;
         margin-bottom: 75px;
     }
@@ -376,7 +376,7 @@ nav ul li a {
         float: left;
     }
 
-    .get-quote form input[type=date]
+    form .get-quote input[type=date]
     {
         text-align: left;
     }
