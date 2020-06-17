@@ -273,6 +273,8 @@ nav ul li a {
 
 
 
+
+
 /* Quote CSS*/
 .blue-container2 {
     color: white;
@@ -371,6 +373,9 @@ form .get-quote input {
     form .get-quote input {
         width: 250px;
         margin-bottom: 75px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #034078;
     }
 
     .confirm {
@@ -381,14 +386,15 @@ form .get-quote input {
 
     form .get-quote input[type=date]
     {
-        text-align: left;
+        font-size: 18px;
+        font-weight: bold;
+        color: #034078;
     }
 
     .cost h5 {
         font-size: 60px;
     }
 }
-
 
 /*Profile CSS*/
 .wrapper {
