@@ -7,6 +7,34 @@
     <title>Registration Page</title>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <div class="logo-left">
+                <a href="index.html"><img class="logo" src="images/logofull.png" alt="logo"></a>
+            </div>
+    
+    
+    
+            <nav>
+                <a class="hide-desktop" href="#">
+                    <img class="menu" id="menu" src="images/ham.png" alt="toggle">
+                </a>
+    
+                <ul class="show-desktop hide-mobile" id="nav">
+                    <li class="exit-btn" id="exit"><img class="ximg" src="images/x.png" alt=""></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="quote.html">Get Quote</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Sign up</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+
+
     <div id = "container">
         <div class = "box">
             <h1>Register</h1>
@@ -20,7 +48,7 @@
                     <input type="password" name="Password" id="Password" placeholder="Enter your Password" required>
                 </div>
                 <div class = "form-group">
-                    <label for = "Password"> Password</label>
+                    <label for = "Password">Confirm Password</label>
                     <input type="password" name="ConfirmPassword" id="Password" placeholder="Confirm your Password" required>
                 </div>
                 <input type = "submit" name = "Register" value = "Register" id = "login-btn">

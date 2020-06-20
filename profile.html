@@ -27,6 +27,7 @@
                     <li><a href="profile.html">Profile</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Sign up</a></li>
                 </ul>
             </nav>
         </header>
@@ -48,7 +49,7 @@
             </div>
             <div class="input_field">
                 <label for="address2">Address 2</label>
-                <input type="text" class="input" placeholder="Enter Address 2" name="address2" id="address2" required>
+                <input type="text" class="input" maxlength="100" placeholder="Enter Address 2" name="address2" id="address2" required>
             </div>
             <div class="input_field">
                 <label for="city">City</label>
@@ -60,6 +61,7 @@
                     <select>
                         <option value="">Select</option>
                         <option value="Texas">TX</option>
+                        <option value="Texas">Other States</option>
                         <!---<option value="">AL</option>
                         <option value="">AK</option>
                         <option value="">AZ</option>
@@ -70,7 +72,7 @@
             </div>
             <div class="input_field">
                 <label for="zipcode">Zipcode</label>
-                <input type="text" class="input" maxlength="9" placeholder="Enter Zipcode" name="zipcode" id="zipcode" required>
+                <input type="text" class="input" maxlength="9" minlength="5" placeholder="Enter Zipcode" name="zipcode" id="zipcode" required>
             </div>
             <div class="input_field terms">
                 <label class="check">

@@ -7,28 +7,34 @@
     
     <title>Quote History</title>
 </head>
-<header>
-    <div class="logo-left">
-        <a href="index.html"><img class="logo" src="images/logofull.png" alt="logo"></a>
-    </div>
-    <div class = "container">
-        <nav>
-            <ul>
-                <li><a href = "">Home</a></li>
-                <li><a href = "">About Us</a></li>
-                <li><a href = "">Login</a></li>
-                <li><a href="">Contact</a></li>
-                <li><a href = "">Get Quote</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-<style>
- 
-</style>
-
-<body>
     
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-left">
+                <a href="index.html"><img class="logo" src="images/logofull.png" alt="logo"></a>
+            </div>
+    
+    
+    
+            <nav>
+                <a class="hide-desktop" href="#">
+                    <img class="menu" id="menu" src="images/ham.png" alt="toggle">
+                </a>
+    
+                <ul class="show-desktop hide-mobile" id="nav">
+                    <li class="exit-btn" id="exit"><img class="ximg" src="images/x.png" alt=""></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="quote.html">Get Quote</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Sign up</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
 
         <h1>Order History</h1>
     
@@ -101,33 +107,6 @@
     </table>
 </div>
 
-<div class="dark-container">
-    <footer>
-        <div class="container">
-            <img class="footer-logo" src="images/logofull.png" alt="">
 
-            <div class="footer-nav">
-                <ul>
-                    <li>
-                        <a href="#">Home</a>
-                    </li>
-                    <li>
-                        <a href="#">About Us</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact Us</a>
-                    </li>
-                </ul>
-    </footer>
-</div>
 
-<div class="dark-container">
-    <div class="container">
-        <div>
-            <p class="copyright">© 2020 MSR Fuel All Rights Reserved</p>
-        </div>
-    </div>
-</div>
-    
-</body>
-</html>
+<script src="nav.js"></script>
