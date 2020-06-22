@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "css/style1.css" type = "text/css">
+    <title>Login Page</title>
+</head>
+<style>
+    *{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+#container{
+    max-width: 400px;
+    margin: 30px auto;
+    
+}
+body{
+    background-color: #344a72; 
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.8;
+}
+.box{
+    background-color: #fff;
+    text-align: center;
+    
+    padding: 15px 25px;
+}
+label{
+    display: block;
+    text-align: left;
+}
+a{
+    text-decoration: none;
+}
+.form-group{
+    display: block;
+    margin-top: 15px;
+}
+input {
+   width:100%;
+    padding: 10px;
+    border: 1px #ddd solid;
+    border-radius: 5px;
+}
+
+#login-btn{
+    background-color: #49c1a2;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+}
+#login-btn:hover{
+    background-color: #37a08e;
+
+}
+.bottom-text{
+    font-size: 13px;
+    margin-top: 20px;
+}
+</style>
+<body>
+    <div id = "container">
+        <div class = "box">
+            <h1>Login</h1>
+            <form action = "./login.html" method = "POST">
+                <div class = "form-group">
+                    <label for = "Username"> Username</label>
+                    <input type="text" name="Username" id="Username" placeholder="Enter your Username" required>
+                </div>
+                <div class = "form-group">
+                    <label for = "Password"> Password</label>
+                    <input type="password" name="Password" id="Password" placeholder="Enter your Password" required>
+                </div>
+                <input type = "submit" name = "Login" value = "Login" id = "login-btn">
+                <div class = "bottom-text">
+                    <p>If you do not have an account, you can <a href = "/register.html">register here</a></p>
+                    <p>If you forgot your password, <a href = "#">click here</a></p>
+                </div>
+            </form>
+            
+        </div>
+
+    </div>
+    
+</body>
+</html>
