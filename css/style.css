@@ -65,6 +65,7 @@ nav ul {
     background: #0A1128;
     height: 100%;
     padding-top: 2em;
+    z-index: 1;
 }
 
 nav ul li a {
