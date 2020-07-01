@@ -40,6 +40,10 @@ app.get('/login', (req,res) => {
 app.get('/register', (req,res) => {
     res.render('register', { page: 'Sign Up' });
 });
+    //register
+app.get('/forgotpassword', (req,res) => {
+    res.render('forgotpassword', { page: 'Forgot Password' });
+});
     //profile
 app.get('/profile', (req,res) => {
     res.render('profile', { page: 'Profile' });
