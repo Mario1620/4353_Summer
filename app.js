@@ -39,12 +39,100 @@ app.get('/forgotpassword', (req,res) => {
     res.render('forgotpassword', { page: 'Forgot Password' });
 });
 */
-/*
+
     //profile
 app.get('/profile', (req,res) => {
     res.render('profile', { page: 'Profile' });
 });
-*/
+app.get('/get-state', (req, res) => {
+    console.log(req.body.profile);
+    //console.log(req.body);
+    //res.redirect('/profile');
+})
+app.post('/add-profile', (req,res) => {
+    /*Full Name (50 characters, required)
+	- Address 1 (100 characters, required)
+	- Address 2 (100 characters, optional)
+	- City (100 characters, required)
+	- State (Drop Down, selection required) DB will store 2 character state code
+    - Zipcode (9 characters, at least 5 character code required) min is 5, max is 9 */
+    
+    /*if(!req.body.fullname){
+        return res.status(401).send({ "message": "A `full name` is required" });
+    }
+    else if(!req.body.address1){
+        return res.status(401).send({ "message": "An `address` is required" });
+    }
+    else if(!req.body.city){
+        return res.status(401).send({ "message": "A `city` is required" });
+    }
+    else if(!req.body.state){
+        return res.status(401).send({ "message": "A `state` is required" });
+    }
+    else if(!req.body.zipcode){
+        return res.status(401).send({ "message": "A `zip code` is required" });
+    }*/
+
+    //const profile_info = [{fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '456 Main St.', city: 'Houston', state: 'TX', zipcode: 77123}]
+    //const profile_info = [{fullname: 'Mario Villareal', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zip: '77123'}, {fullname: 'Steven Khong', address1: '456 Main St.', address2: '', city: 'Dallas', state: 'TX', zip: '74783'}, {fullname: 'Ruth Soto', address1: '783 Sam Rd.', address2: '', city: 'Austin', state: 'TX', zip: '72893'}]
+
+    const num = /\d/;
+    var letter = /[h]/;
+    const numAndLetter = /'0-9a-zA-Z'/;
+
+    var full = req.body.fullname;
+    var add1 = req.body.address1;
+    var add2 = req.body.address2;
+    var city1 = req.body.city;
+    var state1 = req.body.state;
+    var zip = req.body.zipcode;
+
+
+    if (letter.test(full) && full.length <= 50) {
+        //console.log("hello");
+        if (isNaN(add1) && add1.length <= 100) {
+            //console.log("2hello");
+            if ((isNaN(add2) && add2.length <= 100) || add2.length == 0){
+                //console.log("3hello");
+                if(letter.test(city1) && city1.length <= 100){
+                    //console.log("4hello");
+                    if (letter.test(state1)) {//get-state
+                        //console.log("5hello");
+                        if (num.test(zip) && 5 <= zip.length && zip.length <= 9) {
+                            //console.log("6hello");
+                            //res.send(profile_info);
+                            res.redirect('/');
+                        }
+                        else {
+                            //return res.status(401).send({ "message": "A `zip code` is required" });
+                            res.redirect('/profile');
+                        }
+                    }
+                    else {
+                        //return res.status(401).send({ "message": "A `state` is required" });
+                        res.redirect('/profile');
+                    }
+                }
+                else {
+                    //return res.status(401).send({ "message": "A `city` is required" });
+                    res.redirect('/profile');
+                }
+            }
+            else {
+                res.redirect('/profile');
+            }
+        }
+        else {
+            //return res.status(401).send({ "message": "An `address` is required" });
+            res.redirect('/profile');
+        }
+    }
+    else if(!full){
+        //return res.status(401).send({ "message": "A `full name` is required" });
+        res.redirect('/profile');
+    }
+
+});
     //quote history
 app.get('/quote_history', (req,res) => {
     res.render('quote_history', { page: 'Quote History' });
