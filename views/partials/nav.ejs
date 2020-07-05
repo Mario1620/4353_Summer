@@ -13,11 +13,17 @@
         <ul class="show-desktop hide-mobile" id="nav">
             <li class="exit-btn" id="exit"><img class="ximg" src="images/x.png" alt=""></li>
             <li><a href="/">Home</a></li>
-            <li><a href="/quote">Get Quote</a></li>
-            <li><a href="/profile">Profile</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Sign up</a></li>
+            <%
+                if(loggedin){ %>
+                    <li><a href="/quote">Get Quote</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li id = "logout"><a href="/logout">Logout</a></li>
+               <% } 
+                else{ %>
+                    <li id = "login"><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign up</a></li>
+               <% }
+            %>
         </ul>
     </nav>
 </header>
@@ -36,4 +42,6 @@ exit.addEventListener('click', function(e) {
     nav.classList.add('hide-mobile');
     e.preventDefault();
 });
+
+
 </script>
