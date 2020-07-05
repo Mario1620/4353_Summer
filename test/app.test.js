@@ -165,3 +165,30 @@ describe('app', ()=>{
     });
 });
   
+//Mario's test section
+
+
+   describe('login', ()=>{
+    it('login should return 200 Status', function(done){
+        request(app)
+        .get('/login').expect(200).end(done);
+        });
+
+
+        it('login POST should accept a good input', function(done){
+            request(app)
+            .post('/get-login').type('form').send({Username: 'Mario123', Password: 'Houston16'}).then(function(){
+                request(app).get('/').expect(200).expect(/MSR Fuel/, done);
+            });
+        });
+     
+ it('login POST should not accept wrong input', function(done){
+        request(app).post('/get-login').type('form')
+        .send({Username: 'Wrong', Password: 'Input'}).expect(/login/).end(done);
+        
+           
+        });
+        
+
+
+    });
