@@ -4,13 +4,19 @@
   "description": "Software Design Summer 2020 Project ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc mocha"
   },
   "author": "Steven, Mario, Ruth",
   "license": "ISC",
   "dependencies": {
+    "chai-http": "^4.3.0",
     "ejs": "^3.1.3",
-    "express": "^4.17.1",
-    "mongoose": "^5.9.20"
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "supertest": "^4.0.2"
   }
 }

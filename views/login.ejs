@@ -7,19 +7,13 @@
 <body>
     <div class="container">
         <%- include('./partials/nav.ejs'); %>
-    </div>
-
-
-
-
-
-
-
+    </div>        
 
     <div id = "container">
         <div class = "box">
+
             <h1>Login</h1>
-            <form action = "#" method = "POST">
+            <form action = "/getlogin" method = "POST">
                 <div class = "form-group">
                     <label for = "Username"> Username</label>
                     <input type="text" name="Username" id="Username" placeholder="Enter your Username" required>
@@ -28,7 +22,7 @@
                     <label for = "Password"> Password</label>
                     <input type="password" name="Password" id="Password" placeholder="Enter your Password" required>
                 </div>
-                <input type = "submit" name = "Login" value = "Login" id = "login-btn">
+                <input type = "submit" value = "Login" id = "login-btn">
                 <div class = "bottom-text">
                     <p>If you do not have an account, you can <a href = "/register">register here</a></p>
                     <p>If you forgot your password, <a href = "/forgotpassword">click here</a></p>
