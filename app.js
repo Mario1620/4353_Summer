@@ -63,6 +63,8 @@ app.get('/get-state', (req, res) => {
 app.get('/quote_history', (req,res) => {
     res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username });
 });
+
+    //profile post
 app.post('/add-profile', (req,res) => {
     /*Full Name (50 characters, required)
 	- Address 1 (100 characters, required)
@@ -148,7 +150,7 @@ app.post('/add-profile', (req,res) => {
 
 });
 
-
+    //quote post
 app.post('/add-quote', (req, res) => {
 
 
@@ -185,10 +187,7 @@ app.post('/add-quote', (req, res) => {
     }
 });
 
-
-
-
-
+//login post
 app.post('/get-login', (req,res)=>{
     var Username = req.body.Username;
     var Password = req.body.Password;
