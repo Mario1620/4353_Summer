@@ -12,33 +12,37 @@ app.use(express.static('public'));
     //accepting form data
 app.use(express.urlencoded({ extended: true}));
 
+//hard coded array to simulate a DB for login purposes
+const Person_array = [{Username:'Mario123', Password:'Houston16'}, {Username: 'Steven123', Password: 'Austin123'}, {Username: 'RuthE123', Password: 'Dallas123'}];
+
 //get links
     //index
-/*
+
 app.get('/', (req,res) => {
     res.render('index', { page: 'Home'});
 });
-*/
+
     //quote
 app.get('/quote', (req,res) => {
     res.render('quote', { page: 'Get Quote' });
 });
 
-/*
+
     //login
 app.get('/login', (req,res) => {
-    res.render('login', { page: 'Login' });
+    res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username});
 });
-
     //register
 app.get('/register', (req,res) => {
-    res.render('register', { page: 'Sign Up' });
+    res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, , User: req.session.Username });
 });
-    //register
-app.get('/forgotpassword', (req,res) => {
-    res.render('forgotpassword', { page: 'Forgot Password' });
+
+app.get('/logout', (req,res)=>{
+    req.session.destroy();
+    res.redirect('/');
 });
-*/
+
+
 
     //profile
 app.get('/profile', (req,res) => {
@@ -48,7 +52,11 @@ app.get('/get-state', (req, res) => {
     console.log(req.body.profile);
     //console.log(req.body);
     //res.redirect('/profile');
-})
+});
+    //quote history
+app.get('/quote_history', (req,res) => {
+    res.render('quote_history', { page: 'Quote History' });
+});
 app.post('/add-profile', (req,res) => {
     /*Full Name (50 characters, required)
 	- Address 1 (100 characters, required)
@@ -133,10 +141,7 @@ app.post('/add-profile', (req,res) => {
     }
 
 });
-    //quote history
-app.get('/quote_history', (req,res) => {
-    res.render('quote_history', { page: 'Quote History' });
-});
+
 
 app.post('/add-quote', (req, res) => {
     //check if quantity is a integer and positive
@@ -169,12 +174,34 @@ app.post('/add-quote', (req, res) => {
 });
 
 
-/*
-app.post('/getlogin', (req, res) => {
-    console.log(req.body);
-    res.redirect('/');
+
+
+
+app.post('/get-login', urlencodedParser, (req,res)=>{
+    var Username = req.body.Username;
+    var Password = req.body.Password;
+
+    var match = Person_array.find((person, index)=>{
+        if(person.Username === Username && person.Password === Password){
+            return true;
+        }
+    });
+    if(match){
+        req.session.loggedin = true;
+        req.session.Username = Username;
+        res.redirect('/');
+        res.end();
+    }
+    else{
+        
+        res.redirect('login');
+        res.end();
+        
+    }
 });
-*/
+
+
+
 
 /*
     //404
