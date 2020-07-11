@@ -88,22 +88,6 @@ app.post('/add-profile', (req,res) => {
 	- City (100 characters, required)
 	- State (Drop Down, selection required) DB will store 2 character state code
     - Zipcode (9 characters, at least 5 character code required) min is 5, max is 9 */
-    
-    /*if(!req.body.fullname){
-        return res.status(401).send({ "message": "A `full name` is required" });
-    }
-    else if(!req.body.address1){
-        return res.status(401).send({ "message": "An `address` is required" });
-    }
-    else if(!req.body.city){
-        return res.status(401).send({ "message": "A `city` is required" });
-    }
-    else if(!req.body.state){
-        return res.status(401).send({ "message": "A `state` is required" });
-    }
-    else if(!req.body.zipcode){
-        return res.status(401).send({ "message": "A `zip code` is required" });
-    }*/
 
     //const profile_info = [{fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '456 Main St.', city: 'Houston', state: 'TX', zipcode: 77123}]
     //const profile_info = [{fullname: 'Mario Villareal', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zip: '77123'}, {fullname: 'Steven Khong', address1: '456 Main St.', address2: '', city: 'Dallas', state: 'TX', zip: '74783'}, {fullname: 'Ruth Soto', address1: '783 Sam Rd.', address2: '', city: 'Austin', state: 'TX', zip: '72893'}]
@@ -112,7 +96,8 @@ app.post('/add-profile', (req,res) => {
     var words = /^[a-zA-Z ]*$/;
     var word = /[A-z]+/;
     const numAndLetter = /'0-9a-zA-Z'/;
-
+	
+    var user = req.body.usernamePro;
     var full = req.body.fullname;
     var add1 = req.body.address1;
     var add2 = req.body.address2;
@@ -133,7 +118,31 @@ app.post('/add-profile', (req,res) => {
                         if (num.test(zip) && 5 <= zip.length && zip.length <= 9) {
                             //console.log("6hello");
                             //res.send(profile_info);
-                            res.redirect('/');
+                            //res.redirect('/');
+				var pro = ({
+                                "Username": user,
+                                "Fullname": full,
+                                "Address1": add1,
+                                "Address2": add2,
+                                "City": city1,
+                                "State": state1,
+                                "ZipCode": zip
+                            });
+                            
+                            
+                            var sql_profile = "INSERT INTO Profile SET ?";
+
+                            var query = mysql.query(sql_profile, pro, (err, result) => {
+                                if (err) { //error
+                                    //res.redirect('/profile');
+                                    throw err;
+                                    //console.log("error");
+                                }
+                                else {
+                                    res.redirect('/');
+                                    //console.log("You successfully created the profile page!");
+                                }
+                            });
                         }
                         else {
                             //return res.status(401).send({ "message": "A `zip code` is required" });
