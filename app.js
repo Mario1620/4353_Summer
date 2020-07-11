@@ -4,6 +4,10 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const mysql = require('./database');
+//password encryption information
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 //allow the use of ejs
 app.set('view engine', 'ejs');
 
@@ -16,8 +20,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-//hard coded array to simulate a DB for login purposes
-const Person_array = [{Username:'Mario123', Password:'Houston16'}, {Username: 'Steven123', Password: 'Austin123'}, {Username: 'RuthE123', Password: 'Dallas123'}];
+
 
 //get links
     //index
@@ -42,6 +45,19 @@ app.get('/register', (req,res) => {
 });
 
 app.get('/logout', (req,res)=>{
+    var sql = "SELECT Status FROM Users WHERE Username = ?";
+    mysql.query(sql,req.session.Username, (err,result)=>{
+        if(err) throw err;
+        if(result[0].Status !== 'New'){
+            var sql = "UPDATE Users SET STATUS = 'Logged-out' WHERE Username = ?";
+            mysql.query(sql, req.session.Username, (err, result)=>{
+                if(err) throw err;
+                console.log('Status changed...');
+            });
+        }
+       
+    });
+    
     req.session.destroy();
     res.redirect('/');
 });
@@ -189,26 +205,102 @@ app.post('/add-quote', (req, res) => {
 
 //login post
 app.post('/get-login', (req,res)=>{
-    var Username = req.body.Username;
-    var Password = req.body.Password;
+    var userGivenUsername = req.body.Username;
+    var userGivenPassword = req.body.Password;
+    //check for valid Username
+    var sql = 'SELECT * FROM Users WHERE Username = ?';
+    mysql.query(sql,userGivenUsername, (err,result)=>{
+        
+        if(err) throw err;
+        
+        if(result.length === 1){ //if userGivenUsername is clean
+            
+            var hash = result[0].Password;
+         //check to see if Password given hashes to the Password in the DB for this User
+         bcrypt.compare(userGivenPassword, hash, (err, match)=> {
+            if(!match) res.redirect('login');//Passwords do NOT a MATCH
+                
+            else{ //Passwords do MATCH, continue with login process
+            //store SESSION variables
+                req.session.Username = userGivenUsername;
+                req.session.loggedin = true;
 
-    var match = Person_array.find((person, index)=>{
-        if(person.Username === Username && person.Password === Password){
-            return true;
+                if(result[0].Status === 'New'){
+                    res.redirect('profile');
+
+                }
+                else{
+                    res.redirect('/');
+
+                }
+
+            
+            }
+            
+
+         });
+
+
+        }
+        else{ // if userGivenUsername is no good
+            res.send("Please work");
         }
     });
-    if(match){
-        req.session.loggedin = true;
-        req.session.Username = Username;
-        res.redirect('/');
-        res.end();
+
+
+});
+
+    
+    
+  
+
+
+
+//register functionality
+//missing password encryption, come back to later
+app.post('/add-user', (req,res)=>{
+    var Username = req.body.Username;
+    var Password = req.body.Password;
+    var Confirm_Password = req.body.ConfirmPassword;
+    //first check for dirty input
+    const numAndLetter = /\w/;
+    if(numAndLetter.test(Username) && Username.length >= 8)
+    {
+        if(Password === Confirm_Password && numAndLetter.test(Password) && Password.length >=8){
+            //clean input, continue to see if username is taken
+            var sql = "SELECT FROM Users WHERE Username = ?";
+            mysql.query(sql, Username, (err, result)=>{
+                if(!result){ //username is not taken, complete registration
+                    bcrypt.hash(Password, saltRounds, function(err, hash) { //encrypt the plaintext Password and store it in DB during registration process
+                        if (err) throw err;
+
+                        var sql = "INSERT INTO Users VALUES (?,?, ?)";
+                    var newUser = [Username, hash, 'New'];
+                    mysql.query(sql, newUser, (err, result)=>{
+                        if(err) throw err;
+                        console.log("New User Added...");
+                        res.redirect('login'/*, {page: 'Login', loggedin: req.session.loggedin, User: req.session.Username}*/);
+                    });
+                        
+                    });
+                    
+
+                }
+                else{ //Username is taken
+                    res.redirect('Error', {message: 'Username is taken'});
+                }
+
+            });
+        }
+        else{ //password issue
+            res.redirect('Error', {message: 'Password Issues'});
+        }
     }
-    else{
-        
-        res.redirect('login');
-        res.end();
-        
+    else{ //Username issue
+        res.redirect('Error', {message: 'Username issue'});
     }
+    
+
 });
 
 
