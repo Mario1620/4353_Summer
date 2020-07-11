@@ -167,41 +167,56 @@ app.post('/add-profile', (req,res) => {
 });
 
     //quote post
-app.post('/add-quote', (req, res) => {
-
-
-    class PricingModule {
-
-    }
+    app.post('/add-quote', (req, res) => {
+        //check if quantity is a integer and positive
+        if(!isNaN(req.body.quantity) && req.body.quantity > 0 && req.body.quantity.length > 0) {
+            //check if date is string and is a date
+            if(req.body.delivery.length > 0 && Date.parse(req.body.delivery)) {
+                //check if address is string and not empty
+                
+                if(req.body.address.length > 0 && isNaN(req.body.address)){
+                    let sql = "SELECT Address1 FROM profile WHERE Username = " + mysql.escape(req.body.quoteUser);
+                    let query = mysql.query(sql, (err, results) => {
+                        if(err) throw err;
     
-    //check if quantity is a integer and positive
-    if(!isNaN(req.body.quantity) && req.body.quantity > 0 && req.body.quantity.length > 0) {
-        //check if date is string and is a date
-        if(req.body.delivery.length > 0 && Date.parse(req.body.delivery)) {
-            //check if address is string and not empty
-            if(req.body.address.length > 0 && isNaN(req.body.address)){
-                //console.log(req.body);
-                //console.log("Correct Input");
-                res.redirect('/quote_history');
+                        let date = new Date();
+    
+                        quote = {          
+                            Gallons: req.body.quantity,
+                            RequestDate: date,
+                            DeliveryDate: req.body.delivery,
+                            Address: results[0].Address1,
+                            Username:  req.body.quoteUser,
+                            Total: req.body.quantity*5.00     
+                        };
+                        
+                        sql = 'INSERT INTO QuoteHistory SET ?';
+                        query = mysql.query(sql, quote, (err, result) => {
+                            if(err) throw err;
+                            res.redirect('/quote_history');
+                        });
+                    });
+                }
+    
+                else {
+                    //console.log(req.body);
+                    //console.log("Bad Address");
+                    res.redirect('/quote');
+                }
             }
             else {
                 //console.log(req.body);
-                //console.log("Bad Address");
+                //console.log("Bad Date");
                 res.redirect('/quote');
             }
         }
         else {
             //console.log(req.body);
-            //console.log("Bad Date");
+            //console.log("Bad Quantity");
             res.redirect('/quote');
         }
-    }
-    else {
-        //console.log(req.body);
-        //console.log("Bad Quantity");
-        res.redirect('/quote');
-    }
-});
+    });
+    
 
 //login post
 app.post('/get-login', (req,res)=>{
