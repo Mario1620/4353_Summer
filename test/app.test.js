@@ -153,7 +153,7 @@ describe('app', ()=>{
         });
 
 
-        it('login POST should accept a good input', function(done){
+        it('login POST should accept a good input and send to index if Status != New', function(done){
             request(app)
             .post('/get-login').type('form').send({Username: 'Mario123', Password: 'Houston16'}).then(function(){
                 request(app).get('/').expect(200).expect(/MSR Fuel/, done);
@@ -166,7 +166,62 @@ describe('app', ()=>{
         
            
         });
+
+    it('login POST should accept good input and send to profile if Status == New', function(done){
+        request(app).post('/get-login').type('form').send({Username: 'Testing123', Password: 'Password01'})
         
+            .expect(/profile/, done);
+        
+    });
+        
+
+
+    });
+
+    describe('Register', function(){
+        it('Register GET request should return 200', function(done){
+            request(app).get('/register').expect(200).end(done);
+        });
+        //This test needs to be updated every time with a new user that doesnt exists
+        it('Register POST should add a new user', function(done){
+            request(app).post('/add-user').type('form').send({Username: 'Testingx1', Password: 'Password01', ConfirmPassword: 'Password01'})
+            .then(function(){
+                request(app).get('/login').expect(/login/).end(done);
+            });
+            
+        });
+
+        //This should work but SQL prevents it from running
+        it('Register POST should not add an existing user', function(done){
+            request(app).post('/add-user').type('form')
+            .send({Username: 'administrator1', Password: 'Password01', ConfirmPassword: 'Password01'})
+            .expect(/register/).end(done);
+            
+        });  
+
+        it('Register POST should fail if Username does not meet requirements', function(done){
+            request(app).post('/add-user').type('form')
+            .send({Username: 'admin1', Password: 'Password01', ConfirmPassword: 'Password01'})
+            .expect(/register/).end(done);
+           
+
+        });
+        it('Register POST should fail if Password does not meet requirements', function(done){
+            request(app).post('/add-user').type('form')
+            .send({Username: 'administrator2', Password: 'Pass1', ConfirmPassword: 'Pass1'})
+            .expect(/register/).end(done);
+           
+
+        });
+
+        it('Register POST should fail if Passwords do not meet match', function(done){
+            request(app).post('/add-user').type('form')
+            .send({Username: 'adminstrator2', Password: 'Password01', ConfirmPassword: 'Password02'})
+            .expect(/register/).end(done);
+       
+        }); 
+
+
 
 
     });
