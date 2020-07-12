@@ -189,11 +189,11 @@ describe('app', ()=>{
         });
         
         //created one for the insert from profile
-        it('profile POST should good Profile INSERT', function(done){
+        it('profile POST should good Profile INSERT and if Status == Old', function(done){
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'Testing1', fullname: 'John Doe', Address1: '123 Main St.', Address2: '', city: 'NYC', states: 'NY', zipcode: 77555})
+            .send({Username: 'administrator1', fullname: 'John Doe', Address1: '123 Main St.', Address2: '', city: 'NYC', states: 'NY', zipcode: 77555})
             .expect(/\//)
             .end(done);
         });
