@@ -29,6 +29,10 @@ describe('app', ()=>{
             request(app)
             .get('/register').expect(200).end(done);
         });
+        it('Profile should return 200 status', function(done){
+            request(app)
+            .get('/profile').expect(200).end(done);
+        });
         it('Quote History should return 200 Status', function(done){
             request(app)
             .get('/quote_history').expect(200).end(done);
@@ -78,20 +82,11 @@ describe('app', ()=>{
   
     //Profile test
     describe('profile', ()=>{
-        it('profile should return OK status', function(done){
-            request(app)
-            .get('/profile').expect(200).end(done);
-            /*.then(function(response){
-                assert.equal(response.status, 200)
-            })*/
-        });
-
-        //good input
+       //good input
         it('profile POST should accept a good input', function(done){
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zipcode: 77123})
             .expect(/\//)
             .end(done);
         });
@@ -100,7 +95,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: '&hfnie((', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zipcode: 77123})
+            .send({fullname: '&hfnie((', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
             
@@ -108,35 +103,45 @@ describe('app', ()=>{
         //bad input for address1
         it('profile POST should not accecpt a bad address1', function(done){
             request(app)
-            .post('/add-profile').type('form').send({fullname: 'Ruth Soto', address1: 123, address2: '', city: 'Houston', state: 'TX', zipcode: 77123})
+            .post('/add-profile')
+            .type('form')
+            .send({fullname: 'Ruth Soto', address1: 123, address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
         //bad input for address2
         it('profile POST should not accecpt a bad address2', function(done){
             request(app)
-            .post('/add-profile').type('form').send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: 583, city: 'Houston', state: 'TX', zipcode: 77123})
+            .post('/add-profile')
+            .type('form')
+            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: 583, city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
         //bad input for city
         it('profile POST should not accecpt a bad city', function(done){
             request(app)
-            .post('/add-profile').type('form').send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'nvief8439(@', state: 'TX', zipcode: 77123})
+            .post('/add-profile')
+            .type('form')
+            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'nvief8439(@', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
         //bad input for state
         it('profile POST should not accecpt a empty state', function(done){
             request(app)
-            .post('/add-profile').type('form').send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', state: '', zipcode: 77123})
+            .post('/add-profile')
+            .type('form')
+            .send({Username: 'RuthE123', fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'Select', zipcode: 77123})
             .expect(/profile/)
             .end(done); 
         });
         //bad input for zipcode
         it('profile POST should not accecpt a bad zipcode', function(done){
             request(app)
-            .post('/add-profile').type('form').send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zipcode: 77})
+            .post('/add-profile')
+            .type('form')
+            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'TX', zipcode: 77})
             .expect(/profile/)
             .end(done); 
         });
