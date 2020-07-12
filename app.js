@@ -45,20 +45,7 @@ app.get('/register', (req,res) => {
 });
 
 app.get('/logout', (req,res)=>{
-    var sql = "SELECT Status FROM Users WHERE Username = ?";
-    mysql.query(sql,req.session.Username, (err,result)=>{
-        if(err) throw err;
-        if(result[0].Status !== 'New'){
-            var sql = "UPDATE Users SET STATUS = 'Logged-out' WHERE Username = ?";
-            mysql.query(sql, req.session.Username, (err, result)=>{
-                if(err) throw err;
-                console.log('Status changed...');
-            });
-        }
-       
-    });
-    
-    req.session.destroy();
+   req.session.destroy();
     res.redirect('/');
 });
 
