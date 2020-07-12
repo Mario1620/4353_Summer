@@ -13,7 +13,7 @@
         </div>
 
         <form action="/add-profile" method="POST" class="form">
-            <input type="hidden" name="usernamePro" value="<%=User%>">
+            <input type="hidden" name="Username" value="<%=User%>">
             <div class="input_field">
                 <label for="fullname">Full Name</label>
                 <input type="text" class="input" maxlength="50" placeholder="Enter Name" name="fullname" id="fullname" required>
@@ -36,7 +36,7 @@
                     <select required name="states">
                         <!---<option value="">Select</option>
                         <option value="Texas">TX</option>
-                        <option value="Texas">Other States</option>
+                        <option value="">Other States</option>
                         <option value="">AL</option>
                         <option value="">AK</option>
                         <option value="">AZ</option>
