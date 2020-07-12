@@ -121,9 +121,10 @@ describe('app', ()=>{
     }); 
   
   
-  //Profile test
-    describe('profile', ()=>{
-       //good input
+ //Profile test
+    describe('Profile', ()=>{
+
+        //good input
         it('profile POST should accept a good input', function(done){
             request(app)
             .post('/add-profile')
@@ -136,7 +137,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: '&hfnie((', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
+            .send({fullname: '&hfnie((', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
             
@@ -146,7 +147,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: 'Ruth Soto', address1: 123, address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
+            .send({fullname: 'Ruth Soto', Address1: 123, Address2: '', city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
@@ -155,7 +156,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: 583, city: 'Houston', states: 'TX', zipcode: 77123})
+            .send({fullname: 'Ruth Soto', Address1: '123 Smith St.', Address2: 583, city: 'Houston', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
@@ -164,7 +165,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'nvief8439(@', states: 'TX', zipcode: 77123})
+            .send({fullname: 'Ruth Soto', Address1: '123 Smith St.', Address2: '', city: 'nvief8439(@', states: 'TX', zipcode: 77123})
             .expect(/profile/)
             .end(done);
         });
@@ -173,7 +174,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'RuthE123', fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'Select', zipcode: 77123})
+            .send({Username: 'RuthE123', fullname: 'Ruth Soto', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: '', zipcode: 77123})
             .expect(/profile/)
             .end(done); 
         });
@@ -182,19 +183,21 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '', city: 'Houston', states: 'TX', zipcode: 77})
+            .send({fullname: 'Ruth Soto', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: 'TX', zipcode: 77})
             .expect(/profile/)
             .end(done); 
         });
+        
         //created one for the insert from profile
         it('profile POST should good Profile INSERT', function(done){
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'Testingx1', fullname: 'John Doe', address1: '123 Main St.', address2: '', city: 'NYC', states: 'NY', zipcode: 77555})
+            .send({Username: 'Testing1', fullname: 'John Doe', Address1: '123 Main St.', Address2: '', city: 'NYC', states: 'NY', zipcode: 77555})
             .expect(/\//)
             .end(done);
         });
+
     });
   
   //Quotes
