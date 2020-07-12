@@ -272,7 +272,7 @@ app.post('/get-login', (req,res)=>{
 
         }
         else{ // if userGivenUsername is no good
-            res.send("Please work");
+            res.redirect('login');
         }
     });
 
@@ -290,16 +290,16 @@ app.post('/get-login', (req,res)=>{
 app.post('/add-user', (req,res)=>{
     var Username = req.body.Username;
     var Password = req.body.Password;
-    var Confirm_Password = req.body.ConfirmPassword;
+    var ConfirmPassword = req.body.ConfirmPassword;
     //first check for dirty input
     const numAndLetter = /\w/;
     if(numAndLetter.test(Username) && Username.length >= 8)
     {
-        if(Password === Confirm_Password && numAndLetter.test(Password) && Password.length >=8){
+        if(Password === ConfirmPassword && numAndLetter.test(Password) && Password.length >=8){
             //clean input, continue to see if username is taken
-            var sql = "SELECT FROM Users WHERE Username = ?";
+            var sql = "SELECT * FROM Users WHERE Username = ?";
             mysql.query(sql, Username, (err, result)=>{
-                if(!result){ //username is not taken, complete registration
+                if(!result.length){ //username is not taken, complete registration
                     bcrypt.hash(Password, saltRounds, function(err, hash) { //encrypt the plaintext Password and store it in DB during registration process
                         if (err) throw err;
 
@@ -308,7 +308,7 @@ app.post('/add-user', (req,res)=>{
                     mysql.query(sql, newUser, (err, result)=>{
                         if(err) throw err;
                         console.log("New User Added...");
-                        res.redirect('login'/*, {page: 'Login', loggedin: req.session.loggedin, User: req.session.Username}*/);
+                        res.redirect('login');
                     });
                         
                     });
@@ -316,17 +316,18 @@ app.post('/add-user', (req,res)=>{
 
                 }
                 else{ //Username is taken
-                    res.redirect('Error', {message: 'Username is taken'});
+                    
+                    res.redirect('register');
                 }
 
             });
         }
         else{ //password issue
-            res.redirect('Error', {message: 'Password Issues'});
+            res.redirect('register');
         }
     }
     else{ //Username issue
-        res.redirect('Error', {message: 'Username issue'});
+        res.redirect('register');
     }
     
 
