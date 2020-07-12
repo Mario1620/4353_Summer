@@ -193,7 +193,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'administrator1', fullname: 'John Doe', Address1: '123 Main St.', Address2: '', city: 'NYC', states: 'NY', zipcode: 77555})
+            .send({Username: 'test12384', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
             .expect(/\//)
             .end(done);
         });
