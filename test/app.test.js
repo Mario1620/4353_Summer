@@ -225,5 +225,11 @@ describe('app', ()=>{
 
 
     });
+  describe('logout', function(){
+        it('Logout GET request should return 200', function(done){
+
+            request(app).get('/logout').expect(302).end(done);
+        });
+    }); 
 });
   
