@@ -41,10 +41,10 @@ describe('app', ()=>{
 
     //Mario's test section
     describe('login', ()=>{
-    it('login should return 200 Status', function(done){
+    /*it('login should return 200 Status', function(done){
         request(app)
         .get('/login').expect(200).end(done);
-        });
+        });*/
 
 
         it('login POST should accept a good input and send to index if Status != New', function(done){
@@ -71,9 +71,9 @@ describe('app', ()=>{
     });
 
     describe('Register', function(){
-        it('Register GET request should return 200', function(done){
+        /*it('Register GET request should return 200', function(done){
             request(app).get('/register').expect(200).end(done);
-        });
+        });*/
         //This test needs to be updated every time with a new user that doesnt exists
         it('Register POST should add a new user', function(done){
             request(app).post('/add-user').type('form').send({Username: 'Testingx1', Password: 'Password01', ConfirmPassword: 'Password01'})
