@@ -104,7 +104,6 @@ app.post('/add-profile', (req,res) => {
                     if (word.test(state1)) {//get-state
                         if (num.test(zip) && 5 <= zip.length && zip.length <= 9) {
                             //console.log("6hello");
-                            //res.send(profile_info);
                             //res.redirect('/');
 				var pro = ({
                                 "Username": user,
@@ -126,7 +125,7 @@ app.post('/add-profile', (req,res) => {
                                     //console.log("error");
                                 }
                                 else {
-                                    var query = "UPDATE Users SET Status = 'Old' WHERE Username = ?";
+                                    var query = "UPDATE Users SET Status = 'Old' WHERE Username = " + mysql.escape(user);
                                     mysql.query(query, req.session.Username, (err, result)=>{
                                         if(err) throw err;
                                         console.log('Status Changed...');
