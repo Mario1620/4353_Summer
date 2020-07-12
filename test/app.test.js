@@ -189,7 +189,7 @@ describe('app', ()=>{
         });
         
         //created one for the insert from profile
-        it('profile POST should good Profile INSERT and if Status == Old', function(done){
+        it('profile POST should good Profile INSERT', function(done){
             request(app)
             .post('/add-profile')
             .type('form')
