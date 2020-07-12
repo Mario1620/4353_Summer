@@ -102,7 +102,7 @@ app.post('/add-profile', (req,res) => {
     var add1 = req.body.address1;
     var add2 = req.body.address2;
     var city1 = req.body.city;
-    var state1 = req.body.state;
+    var state1 = req.body.states;
     var zip = req.body.zipcode;
 
 
@@ -120,7 +120,7 @@ app.post('/add-profile', (req,res) => {
                             //res.send(profile_info);
                             //res.redirect('/');
 				var pro = ({
-                                "Username": user,
+                                "Username": req.session.Username,
                                 "Fullname": full,
                                 "Address1": add1,
                                 "Address2": add2,
@@ -139,6 +139,11 @@ app.post('/add-profile', (req,res) => {
                                     //console.log("error");
                                 }
                                 else {
+                                    var query = "UPDATE Users SET Status = 'Old' WHERE Username = ?";
+                                    mysql.query(query, req.session.Username, (err, result)=>{
+                                        if(err) throw err;
+                                        console.log('Status Changed...');
+                                    });
                                     res.redirect('/');
                                     //console.log("You successfully created the profile page!");
                                 }
