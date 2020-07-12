@@ -84,7 +84,7 @@ app.post('/add-profile', (req,res) => {
     var word = /[A-z]+/;
     const numAndLetter = /'0-9a-zA-Z'/;
 	
-    var user = req.body.usernamePro;
+    var user = req.body.Username;
     var full = req.body.fullname;
     var add1 = req.body.address1;
     var add2 = req.body.address2;
@@ -107,7 +107,7 @@ app.post('/add-profile', (req,res) => {
                             //res.send(profile_info);
                             //res.redirect('/');
 				var pro = ({
-                                "Username": req.session.Username,
+                                "Username": user,
                                 "Fullname": full,
                                 "Address1": add1,
                                 "Address2": add2,
