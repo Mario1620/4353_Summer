@@ -86,8 +86,8 @@ app.post('/add-profile', (req,res) => {
 	
     var user = req.body.Username;
     var full = req.body.fullname;
-    var add1 = req.body.address1;
-    var add2 = req.body.address2;
+    var add1 = req.body.Address1;
+    var add2 = req.body.Address2;
     var city1 = req.body.city;
     var state1 = req.body.states;
     var zip = req.body.zipcode;
