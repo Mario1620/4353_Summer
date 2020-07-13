@@ -174,8 +174,7 @@ app.post('/add-profile', (req,res) => {
             if(req.body.delivery.length > 0 && Date.parse(req.body.delivery)) {
                 //check if address is string and not empty
                 
-                if(req.body.address.length > 0 && isNaN(req.body.address)){
-                    let sql = "SELECT Address1 FROM profile WHERE Username = " + mysql.escape(req.body.quoteUser);
+                    let sql = "SELECT Address1 FROM Profile WHERE Username = " + mysql.escape(req.body.quoteUser);
                     let query = mysql.query(sql, (err, results) => {
                         if(err) throw err;
     
@@ -196,13 +195,6 @@ app.post('/add-profile', (req,res) => {
                             res.redirect('/quote_history');
                         });
                     });
-                }
-    
-                else {
-                    //console.log(req.body);
-                    //console.log("Bad Address");
-                    res.redirect('/quote');
-                }
             }
             else {
                 //console.log(req.body);
