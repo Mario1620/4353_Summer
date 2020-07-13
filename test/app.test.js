@@ -208,7 +208,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-quote')
             .type('form')
-            .send({quantity: 23, address: "1234 Street", delivery: '2020-03-23'})
+            .send({quantity: 23, address: "1234 Street", delivery: '2020-03-23', quoteUser: "Mario123"})
             .expect(/quote_history/)
             .end(done);
         });
@@ -227,15 +227,6 @@ describe('app', ()=>{
             .post('/add-quote')
             .type('form')
             .send({quantity: 1234, address: "1232 Street", delivery: 'hello'})
-            .expect(/quote/)
-            .end(done);
-        });
-        //bad address
-        it('Quote POST should not accept a bad address (is a number)', function(done){
-            request(app)
-            .post('/add-quote')
-            .type('form')
-            .send({quantity: 23, address: 234, delivery: '2020-03-23'})
             .expect(/quote/)
             .end(done);
         });
