@@ -64,7 +64,21 @@ app.get('/get-state', (req, res) => {
 */
     //quote history
 app.get('/quote_history', (req,res) => {
-    res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username });
+    var resultArray;
+    var sql = 'SELECT * FROM QuoteHistory WHERE Username = ?';
+    mysql.query(sql, req.session.Username, (err, result)=>{
+        if(err) throw err;
+        console.log(result);
+        if(result.length === 0)
+        {
+            res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: undefined });
+        }
+        else{
+            resultArray = result;
+            res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray });
+        }
+    });
+    
 });
 
     //profile post
