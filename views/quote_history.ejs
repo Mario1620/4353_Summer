@@ -9,74 +9,48 @@
 
 
         <h1>Order History</h1>
+       
+        
     
     <div class = "container">
-    <table>
-        <tr>
-            <th>Quote ID</th>
+        <% if(quotes === undefined)
+        { %>
+            <p>Nothing to display</p>
+
+       <% } %>
+       <% if(quotes !== undefined) { %>
+        <table>
+            <tr>
+                <th>Quote ID</th>
             <th>Order Date</th>
             <th>Gallons Requested</th>
             <th>Price per Gallon</th>
             <th>Delivery Date</th>
             <th>Delivery Address</th>
             <th>Total Cost</th>
-            <th>Reorder</th>
-        </tr>
-        <tr>
-            <td>1257033</td>
-            <td>12/21/1991</td>
-            <td>1.5</td>
-            <td>1.56</td>
-            <td>12/22/2012</td>
-            <td>123 Fake St. Houston TX 77087</td>
-            <td>120.00</td>
-            <td><a class = "reorder" href = "#">Click to Reorder</a></td>
-        </tr>
-        <tr>
-            <td>1257069</td>
 
-            <td>2/31/1991</td>
-            <td>100</td>
-            <td>0.10</td>
-            <td>2/32/1991</td>
-            <td>123 Fake St. Houston TX 77087</td>
-            <td>10.00</td>
-            <td><a class = "reorder" href = "#">Click to Reorder</a></td>
-        </tr>
-        <tr>
-            <td>1257069</td>
+            </tr>
+            <% for(var i =0; i < quotes.length; i++) { 
+                var requestDate = quotes[i].RequestDate.toString();
+                var OrderDate = requestDate.slice(0,15);
+                var DeliveryDate = quotes[i].DeliveryDate.toString();
+                DeliveryDate = DeliveryDate.slice(0,15);
+                %>
+                <tr>
+                <td> <%= quotes[i].QuoteID %> </td>
+                <td> <%= OrderDate %> </td>
+                <td> <%= quotes[i].Gallons %> </td>
+                <td> <%= 1.50 %> </td>
+                <td> <%= DeliveryDate %> </td>
+                <td> <%= quotes[i].Address %> </td>
+                <td> <%= quotes[i].Total %> </td>
+            </tr>
 
-            <td>2/31/1991</td>
-            <td>100</td>
-            <td>0.10</td>
-            <td>2/32/1991</td>
-            <td>123 Fake St. Houston TX 77087</td>
-            <td>10.00</td>
-            <td><a class = "reorder" href = "#">Click to Reorder</a></td>
-        </tr>
-        <tr>
-            <td>1257069</td>
+            <% } %>
+        </table>
 
-            <td>2/31/1991</td>
-            <td>100</td>
-            <td>0.10</td>
-            <td>2/32/1991</td>
-            <td>123 Fake St. Houston TX 77087</td>
-            <td>10.00</td>
-            <td><a  class = "reorder"href = "#">Click to Reorder</a></td>
-        </tr>
-        <tr>
-            <td>1257069</td>
-
-            <td>2/31/1991</td>
-            <td>100</td>
-            <td>0.10</td>
-            <td>2/32/1991</td>
-            <td>123 Fake St. Houston TX 77087</td>
-            <td>10.00</td>
-            <td><a  class = "reorder"href = "#">Click to Reorder</a></td>
-        </tr>
-    </table>
+        <% } %> 
+    
 </div>
 
 
