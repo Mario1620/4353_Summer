@@ -201,7 +201,7 @@ app.post('/add-quote', (req, res) => {
                     State: results[0].State,
                     Username:  req.body.quoteUser,
                     //Total: req.body.quantity*5.00 
-                    Total: formula(req.body.quantity, results[0].State, req.body.quoteUser)    
+                    Total: formula(req.body.quantity, results[0].State, results)    
                 };
                         
                 sql = 'INSERT INTO QuoteHistory SET ?';
@@ -225,7 +225,7 @@ app.post('/add-quote', (req, res) => {
 });
     
 
-function formula(Gallons, State, username) {//formula for get quote page
+function formula(Gallons, State, result) {//formula for get quote page
     /*
     Suggested Price = Current Price + Margin
     Where,
@@ -252,86 +252,52 @@ function formula(Gallons, State, username) {//formula for get quote page
     //var totalAmount;
 
 
-    //location factor
-    if (State == "TX"){
-        locationFactor = 2/100;
-    }
-    else {
-        locationFactor = 4/100;
-    }
-    //get the state, gallons, and rate history from the db?
-    var sql = 'SELECT Gallons, State FROM QuoteHistory WHERE Username = ' + mysql.escape(username);
-    mysql.query(sql, (err,result)=>{
-        
-        if(err) throw err;
-        
-        //rate history factor
-        /*var sql = 'SELECT * FROM QuoteHistory WHERE Username = ?';
-        mysql.query(sql, req.session.Username, (err, result)=>{
-            
-        });*/
-
-        //if(err) throw err;
-        console.log(result);
-        if(result.length === 0) {
-                rateHistory = 0;
-            }
-            else{
-                rateHistory = 1/100;
-            }
-
-        /*if (rateFuel == 0) { //no history
-            
-        }
-        else { //if there is any rows for the client from quote history
-            
-        }*/
-
-        
-
-    });
     //gallons requested factor
-        if (Gallons > 1000) {
-            gallonsRequested = 2/100;
-        }
-        else {
-            gallonsRequested = 3/100;
-        }
-    /*
-    //location factor
-    if (state == "TX" || state == "Texas"){
-        locationFactor = 2/100;
-    }
-    else {
-        locationFactor = 4/100;
-    }
-
-    //rate history factor
-    if (rateFuel == undefined) { //no history
-        rateHistory = 0;
-    }
-    else { //if there is any rows for the client from quote history
-        rateHistory = 1/100;
-    }
-
-    //gallons requested factor
-    if (gallons > 1000) {
+    if (Gallons > 1000) {
         gallonsRequested = 2/100;
     }
     else {
         gallonsRequested = 3/100;
     }
-    */
+    console.log(gallonsRequested);  
+
+    //location factor
+    if (State == "TX") {
+        
+        locationFactor = 2/100;
+    }
+    else {
+        locationFactor = 4/100;
+    }
+    console.log(locationFactor);    
+
+    //get the state, gallons, and rate history from the db?
+    /*var sql = 'SELECT Gallons, State FROM QuoteHistory WHERE Username = ' + mysql.escape(username);
+    mysql.query(sql, (err,result)=>{
+        
+        if(err) throw err;
+
+    });*/
+
+    console.log(result);
+    if(result.length === 0) {
+        rateHistory = 0;
+    }
+    else{
+        rateHistory = 1/100;
+    }
+    console.log(rateHistory); 
 
     margin = currentPrice * (locationFactor - rateHistory + gallonsRequested + companyProfit);
+    console.log(margin);
     suggestPrice = currentPrice + margin;
+    console.log(suggestPrice);
 
     totalAmount = Gallons * suggestPrice;
     console.log(totalAmount);    
     
     return totalAmount;
 };
-
 
 
 //login post
