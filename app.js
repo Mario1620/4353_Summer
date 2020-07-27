@@ -31,7 +31,22 @@ app.get('/', (req,res) => {
 
     //quote
 app.get('/quote', (req,res) => {
-    res.render('quote', { page: 'Get Quote', loggedin: req.session.loggedin, User: req.session.Username });
+    var address;
+    var sql = 'SELECT * FROM Profile WHERE Username = ?';
+    mysql.query(sql, req.session.Username, (err, result)=>{
+        address = result[0].Address1;
+        var city = result[0].City;
+        var state = result[0].State;
+        var zip = result[0].ZipCode;
+        address = address+" "+city+" "+state+" "+zip;
+        console.log(address);
+        res.render('quote', { page: 'Get Quote', loggedin: req.session.loggedin, User: req.session.Username, Address: address });
+    });
+    
+});
+app.get('/finalize_quote', (req,res)=>{
+    res.render('finalize_quote', {page: 'Confirm Quote', loggedin: req.session.loggedin, User: req.session.Username, Gallons: req.session.Gallons, Address: req.session.Address,
+     DeliveryDate: req.session.deliveryDate, State: req.session.state, Total: req.session.total, SuggestedPrice: (req.session.total/req.session.Gallons)});
 });
 
 
@@ -188,27 +203,24 @@ app.post('/add-profile', (req,res) => {
             if(req.body.delivery.length > 0 && Date.parse(req.body.delivery)) {
                 //check if address is string and not empty
                 
-                    let sql = "SELECT Address1 FROM Profile WHERE Username = " + mysql.escape(req.body.quoteUser);
+                    let sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.quoteUser);
                     let query = mysql.query(sql, (err, results) => {
                         if(err) throw err;
     
                         let date = new Date();
-    
-                        quote = {          
-                            Gallons: req.body.quantity,
-                            RequestDate: date,
-                            DeliveryDate: req.body.delivery,
-                            Address: results[0].Address1,
-                            Username:  req.body.quoteUser,
-                            //Total: req.body.quantity*5.00 
-                    	    Total: formula(req.body.quantity, results[0].State, results)     
-                        };
-                        
-                        sql = 'INSERT INTO QuoteHistory SET ?';
-                        query = mysql.query(sql, quote, (err, result) => {
+                        console.log(results[0].State);
+                        req.session.Address = results[0].Address1+ ' '+ results[0].State;
+                        req.session.Gallons = req.body.quantity;
+                        req.session.deliveryDate = req.body.delivery; 
+                        req.session.state = results[0].State;
+                        sql = "SELECT * FROM QuoteHistory WHERE Username = " +  mysql.escape(req.body.quoteUser);
+                        mysql.query(sql,(err,result)=>{
                             if(err) throw err;
-                            res.redirect('/quote_history');
+                            req.session.total = formula(req.session.Gallons, req.session.state, result);
+                            res.redirect('/finalize_quote');
                         });
+                        
+                        
                     });
             }
             else {
@@ -223,6 +235,45 @@ app.post('/add-profile', (req,res) => {
             res.redirect('/quote');
         }
     });
+    
+
+
+    app.post('/finalizequote', (req,res)=>{
+        var sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.quoteUser);
+        mysql.query(sql, (err,result)=>{
+            if(err) throw err;
+            quote = {          
+                Gallons: req.session.Gallons,
+                RequestDate: new Date(),
+                DeliveryDate: req.body.delivery,
+                Address: req.session.Address,
+                State: req.session.state,
+                Username:  req.body.quoteUser,
+                SuggestedPrice: (req.session.total/req.session.Gallons),
+                Total: req.session.total    
+                };
+                sql = 'INSERT INTO QuoteHistory SET ?';
+        query = mysql.query(sql, quote, (err, result) => {
+        if(err) throw err;
+        res.redirect('/quote_history');
+        }); 
+        });
+        
+    
+                        
+        
+                        
+                        
+});
+
+app.post('/cancel_quote', (req,res)=>{
+    req.session.Address = undefined;
+    req.session.state = undefined;
+    req.session.Gallons = undefined;
+    req.session.deliveryDate = undefined;
+    req.session.total = undefined;
+    res.redirect('/quote');
+});
 
 function formula(Gallons, State, result) {//formula for get quote page
     /*
@@ -230,7 +281,6 @@ function formula(Gallons, State, result) {//formula for get quote page
     Where,
     Current price per gallon = $1.50 (this is the price what distributor gets from refinery and it varies based upon crude price. But we are keeping it constant for simplicity)
     Margin =  Current Price * (Location Factor - Rate History Factor + Gallons Requested Factor + Company Profit Factor)
-
     Consider these factors:
     Location Factor = 2% for Texas, 4% for out of state.
     Rate History Factor = 1% if client requested fuel before, 0% if no history (you can query fuel quote table to check if there are any rows for the client)
@@ -246,7 +296,7 @@ function formula(Gallons, State, result) {//formula for get quote page
     var rateHistory;
     //var rateFuel; //quoteHistory
     var gallonsRequested;
-    //var gallons
+    //var gallons = req.body.quantity.length; //
     var companyProfit = 10/100;
     //var totalAmount;
 
@@ -270,6 +320,13 @@ function formula(Gallons, State, result) {//formula for get quote page
     }
     console.log(locationFactor);    
 
+    //get the state, gallons, and rate history from the db?
+    /*var sql = 'SELECT Gallons, State FROM QuoteHistory WHERE Username = ' + mysql.escape(username);
+    mysql.query(sql, (err,result)=>{
+        
+        if(err) throw err;
+    });*/
+
     console.log(result);
     if(result.length === 0) {
         rateHistory = 0;
@@ -280,16 +337,15 @@ function formula(Gallons, State, result) {//formula for get quote page
     console.log(rateHistory); 
 
     margin = currentPrice * (locationFactor - rateHistory + gallonsRequested + companyProfit);
-    //console.log(margin);
+    console.log(margin);
     suggestPrice = currentPrice + margin;
-    //console.log(suggestPrice);
+    console.log(suggestPrice);
 
     totalAmount = Gallons * suggestPrice;
     console.log(totalAmount);    
     
     return totalAmount;
 };
-    
 
 //login post
 app.post('/get-login', (req,res)=>{
@@ -322,21 +378,16 @@ app.post('/get-login', (req,res)=>{
 
                 }
 
-            
             }
-            
-
-         });
-
-
-        }
+        });
+    }
         else{ // if userGivenUsername is no good
             res.redirect('login');
         }
     });
-
-
 });
+
+
 
     
     
@@ -401,7 +452,7 @@ app.use((req,res) => {
     res.render('404', {page: '404 Page Not Found'});
 });
 */
-
-app.listen(3000)
+var PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>{console.log(`Server running on PORT ${PORT}` )});
 
 module.exports = app;
