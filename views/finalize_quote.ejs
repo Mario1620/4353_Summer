@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs'); %>
+    <link rel="stylesheet" href="css/style.css">
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs'); %>
+    </div>
+
+
+    <div class="blue-container2">
+        <div class="container">
+            <h1 class="h1-quote">Confirm your quote</h1>
+            
+            <form action="/finalizequote" method="POST">
+                <div class="full-quote">
+                    <div class="get-quote">
+                        <label for="quantity">How many gallons?</label>
+                        <h2> <%= Gallons %></h2>
+                        <input type="hidden" id="quantity" name="quantity" value = "<%= Gallons %>" >
+            
+                        <label for="address">Delivery Address</label> 
+                        <h3> <%= Address %> </h3>
+                        
+                        <input type="hidden" name="quoteUser" value="<%=User%>">
+            
+                        <label for="delivery">Delivery Date</label>
+                        <h2> <%= DeliveryDate %></h2>
+                        <input type="hidden" id="delivery" name="delivery" value = "<%= DeliveryDate%>">
+                    </div>
+        
+        
+                    <div class="cost">
+                        <p>Suggested Price/Gallon</p>
+                        <h5> <%= SuggestedPrice %> </h5>
+        
+                        <p>Total Amount</p>
+                        <h5><%= Total %> </h5>
+                    </div>
+                </div>
+                <input class="confirm" type="submit" value="Finalize Quote">
+                
+            </form>
+            <form action = "cancel_quote" method = "POST">
+                <input class = "confirm" type = "submit" value = "Cancel">
+            </form>
+            
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!--footer-->
+    <div class="dark-container">
+        <footer>
+            <div class="container">
+                <img class="footer-logo" src="images/logofull.png" alt="">
+
+                <div class="footer-nav">
+                    <ul>
+                        <li>
+                            <a href="#">Home</a>
+                        </li>
+                        <li>
+                            <a href="#">About Us</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact Us</a>
+                        </li>
+                    </ul>
+        </footer>
+    </div>
+
+    <div class="dark-container">
+        <div class="container">
+            <div>
+                <p class="copyright">© 2020 MSR Fuel All Rights Reserved</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="nav.js"></script>
