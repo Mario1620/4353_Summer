@@ -19,9 +19,9 @@
                         <input type="number" id="quantity" name="quantity" min="0" required>
             
                         <label for="address">Delivery Address</label> 
-                        <h3>1234 Fake Street, Houston TX</h3>
+                        <h3> <%= Address %> </h3>
                         <input type="hidden" name="address" value="1234 Fake Street, Houston TX">
-                        <input type="hidden" name="quoteUser" value="<%=User%>"
+                        <input type="hidden" name="quoteUser" value="<%=User%>">
             
                         <label for="delivery">Delivery Date</label>
                         <input type="date" id="delivery" name="delivery" required>
@@ -29,15 +29,16 @@
         
         
                     <div class="cost">
-                        <p>Suggested Price/Gallon</p>
-                        <h5>$8/Gallon</h5>
+                        <p>Current Price/Gallon</p>
+                        <h5>$1.50/Gallon</h5>
         
                         <p>Total Amount</p>
-                        <h5>$32.00</h5>
+                        <h5>-</h5>
                     </div>
                 </div>
                 <input class="confirm" type="submit" value="Confirm Quote">
             </form>
+            
         </div>
     </div>
 
