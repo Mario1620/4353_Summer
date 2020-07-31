@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs'); %>
+    <link rel="stylesheet" href="css/style.css">
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs'); %>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="title">
+            <h1>Profile</h1>
+        </div>
+
+        <form action="/info_profile" method="POST" class="form">
+            <input type="hidden" name="Username" value="<%=User%>">
+            <div class="input_field">
+                <label for="fullname">Full Name</label>
+                <p> <%= Fullname %></p>
+            </div>
+            <div class="input_field">
+                <label for="Address1">Address 1</label>
+                <p> <%= Address1 %></p>
+            </div>
+            <div class="input_field"><!---optional--->
+                <label for="Address2">Address 2</label>
+                <p> <%= Address2 %></p>
+            </div>
+            <div class="input_field">
+                <label for="city">City</label>
+                <p> <%= City %></p>
+            </div>
+            <div class="input_field">
+                <label>State</label>
+                <p><%= State %></p>
+            </div>
+            <div class="input_field">
+                <label for="zipcode">Zipcode</label>
+                <p> <%= Zipcode %> </p>
+            </div>
+            
+            <div class="input_field">
+                <!---<a class="btn" href="/profile">Submit</a>--->
+                <input type="submit" value="Edit" class="btn">
+                <span></span>
+                <input type="submit" value="Cancel" class="btn">
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+
+
+    <!--footer-->
+    <div class="dark-container">
+        <footer>
+            <div class="container">
+                <img class="footer-logo" src="images/logofull.png" alt="">
+
+                <div class="footer-nav">
+                    <ul>
+                        <li>
+                            <a href="index.ejs">Home</a>
+                        </li>
+                        <li>
+                            <a href="#">About Us</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact Us</a>
+                        </li>
+                    </ul>
+        </footer>
+    </div>
+
+    <div class="dark-container">
+        <div class="container">
+            <div>
+                <p class="copyright">© 2020 MSR Fuel All Rights Reserved</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="nav.js"></script>
