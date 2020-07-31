@@ -73,8 +73,17 @@ app.get('/profile', (req,res) => {
 });
     //profile information
 app.get('/profile_info', (req,res) => {
-    res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Full, Address1: req.session.Address1, 
-        Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.Zipcode});
+    var sql = 'SELECT * FROM Profile WHERE Username = ?';
+    mysql.query(sql, req.session.Username, (err, result)=>{
+        var name = result[0].Fullname;
+        var address1 = result[0].Address1;
+        var address2 = result[0].Address2;
+        var city = result[0].City;
+        var state = result[0].State;
+        var zip = result[0].ZipCode;
+        res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, address1, 
+        address2, City: city, State: state, ZipCode: zip});
+    });
 });
 /*
 app.get('/get-state', (req, res) => {
