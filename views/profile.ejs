@@ -16,24 +16,24 @@
             <input type="hidden" name="Username" value="<%=User%>">
             <div class="input_field">
                 <label for="fullname">Full Name</label>
-                <input type="text" class="input" maxlength="50" placeholder="Enter Name" name="fullname" id="fullname" required>
+                <input type="text" class="input" maxlength="50" placeholder="Enter Name" name="fullname" id="fullname" value="<%=Fullname%>" required>
             </div>
             <div class="input_field">
                 <label for="Address1">Address 1</label>
-                <input type="text" class="input" maxlength="100" placeholder="Enter Address 1" name="Address1" id="Address1" required>
+                <input type="text" class="input" maxlength="100" placeholder="Enter Address 1" name="Address1" id="Address1" value="<%=Address1%>" required>
             </div>
             <div class="input_field"><!---optional--->
                 <label for="Address2">Address 2</label>
-                <input type="text" class="input" maxlength="100" placeholder="Enter Address 2" name="Address2" id="Address2">
+                <input type="text" class="input" maxlength="100" placeholder="Enter Address 2" name="Address2" id="Address2" value="<%=Address2%>">
             </div>
             <div class="input_field">
                 <label for="city">City</label>
-                <input type="text" class="input" maxlength="100" placeholder="Enter City" name="city" id="city" required>
+                <input type="text" class="input" maxlength="100" placeholder="Enter City" name="city" id="city" value="<%=City%>" required>
             </div>
             <div class="input_field">
                 <label>State</label>
                 <div class="custom_select" action="get-state">
-                    <select required name="states">
+                    <select required name="states" value="<%=State%>">
                         <!---<option value="">Select</option>
                         <option value="Texas">TX</option>
                         <option value="">Other States</option>
@@ -99,7 +99,7 @@
             </div>
             <div class="input_field">
                 <label for="zipcode">Zipcode</label>
-                <input type="text" class="input" maxlength="9" minlength="5" placeholder="Enter Zipcode" name="zipcode" id="zipcode" required>
+                <input type="text" class="input" maxlength="9" minlength="5" placeholder="Enter Zipcode" name="zipcode" id="zipcode" value="<%=User%>"required>
             </div>
             <div class="input_field terms">
                 <label class="check">
@@ -125,7 +125,7 @@
                 <div class="footer-nav">
                     <ul>
                         <li>
-                            <a href="#">Home</a>
+                            <a href="index.ejs">Home</a>
                         </li>
                         <li>
                             <a href="#">About Us</a>
