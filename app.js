@@ -68,7 +68,13 @@ app.get('/logout', (req,res)=>{
 
     //profile
 app.get('/profile', (req,res) => {
-    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username });
+    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Ful, Address1: req.session.Address1, 
+    Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.Zipcode});
+});
+    //profile information
+app.get('/profile_info', (req,res) => {
+    res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Full, Address1: req.session.Address1, 
+        Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.Zipcode});
 });
 /*
 app.get('/get-state', (req, res) => {
@@ -194,6 +200,30 @@ app.post('/add-profile', (req,res) => {
     }
 
 });
+
+//Profile info
+app.post('/info_profile', (req, res)=> {
+    let sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.Username);
+    let query = mysql.query(sql, (err, results) => {
+        info = {
+            Username: req.session.Username,
+            Fullname: req.session.Fullname,
+            Address1: req.session.Address1,
+            Address2: req.session.Address2,
+            City: req.session.City,
+            State: req.session.State,
+            ZipCode: req.session.Zipcode
+        };
+        sql = 'INSERT INTO Profile SET ?';
+        query = mysql.query(sql, quote, (err, result) => {
+            if(err) throw err;
+            res.redirect('/profile');
+        });
+
+    });
+});
+
+
 
     //quote post
     app.post('/add-quote', (req, res) => {
