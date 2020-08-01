@@ -67,10 +67,36 @@ app.get('/logout', (req,res)=>{
 
 
     //profile
+/*app.get('/profile', (req,res) => {
+    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username });
+}); */
+
+//profile
 app.get('/profile', (req,res) => {
-    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Ful, Address1: req.session.Address1, 
-    Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.Zipcode});
+    var sql = 'SELECT * FROM Profile WHERE Username = ?';
+    mysql.query(sql, req.session.Username, (err, result)=>{
+        console.log(req.session.Username);
+        if(result.length === 0)
+        {
+            res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname:undefined });
+        
+        }
+        else{
+            console.log("Yes");
+            var name = result[0].Fullname;
+        var address1 = result[0].Address1;
+        var address2 = result[0].Address2;
+        var city = result[0].City;
+        var state = result[0].State;
+        var zip = result[0].ZipCode;
+    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, Address1: address1, 
+    Address2: address2, City: city, State: state, ZipCode: zip});
+            
+        }
+    });
+
 });
+
     //profile information
 app.get('/profile_info', (req,res) => {
     var sql = 'SELECT * FROM Profile WHERE Username = ?';
@@ -81,17 +107,11 @@ app.get('/profile_info', (req,res) => {
         var city = result[0].City;
         var state = result[0].State;
         var zip = result[0].ZipCode;
-        res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, address1, 
-        address2, City: city, State: state, ZipCode: zip});
+        res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, Address1: address1, 
+        Address2: address2, City: city, State: state, ZipCode: zip});
     });
 });
-/*
-app.get('/get-state', (req, res) => {
-    console.log(req.body.profile);
-    //console.log(req.body);
-    //res.redirect('/profile');
-});
-*/
+
     //quote history
 app.get('/quote_history', (req,res) => {
     var resultArray;
@@ -113,6 +133,7 @@ app.get('/quote_history', (req,res) => {
 
     //profile post
 app.post('/add-profile', (req,res) => {
+    console.log(1);
     /*Full Name (50 characters, required)
 	- Address 1 (100 characters, required)
 	- Address 2 (100 characters, optional)
@@ -149,35 +170,62 @@ app.post('/add-profile', (req,res) => {
                         if (num.test(zip) && 5 <= zip.length && zip.length <= 9) {
                             //console.log("6hello");
                             //res.redirect('/');
-				var pro = ({
-                                "Username": user,
-                                "Fullname": full,
-                                "Address1": add1,
-                                "Address2": add2,
-                                "City": city1,
-                                "State": state1,
-                                "ZipCode": zip
-                            });
-                            
-                            
-                            var sql_profile = "INSERT INTO Profile SET ?";
-
-                            var query = mysql.query(sql_profile, pro, (err, result) => {
-                                if (err) { //error
-                                    //res.redirect('/profile');
-                                    throw err;
-                                    //console.log("error");
-                                }
-                                else {
-                                    var query = "UPDATE Users SET Status = 'Old' WHERE Username = " + mysql.escape(user);
-                                    mysql.query(query, req.session.Username, (err, result)=>{
-                                        if(err) throw err;
-                                        console.log('Status Changed...');
+				            
+                            var sql = "SELECT * FROM Profile WHERE Username = ?";
+                            mysql.query(sql, req.session.Username, (err,result)=>{
+                                if(result.length === 0){ //user submitting form for first time
+                                    var sql_profile = "INSERT INTO Profile SET ?";
+                                    var pro = ({
+                                        "Username": user,
+                                        "Fullname": full,
+                                        "Address1": add1,
+                                        "Address2": add2,
+                                        "City": city1,
+                                        "State": state1,
+                                        "ZipCode": zip
                                     });
-                                    res.redirect('/');
-                                    //console.log("You successfully created the profile page!");
+                                    var query = mysql.query(sql_profile, pro, (err, result) => {
+                                        if (err) { //error
+                                            //res.redirect('/profile');
+                                            throw err;
+                                            //console.log("error");
+                                        }
+                                        else {
+                                            var query = "UPDATE Users SET Status = 'Old' WHERE Username = " + mysql.escape(user);
+                                            mysql.query(query, req.session.Username, (err, result)=>{
+                                                if(err) throw err;
+                                                console.log('Status Changed...');
+                                            });
+                                            res.redirect('/');
+                                            //console.log("You successfully created the profile page!");
+                                        }
+                                    });
+                                }
+                                else{ // user updating info
+                                    console.log('Yay2222');
+                                    var pro = ({
+                                        
+                                        "Fullname": full,
+                                        "Address1": add1,
+                                        "Address2": add2,
+                                        "City": city1,
+                                        "State": state1,
+                                        "ZipCode": zip
+                                    });
+                                    var sql = "UPDATE Profile SET  ? WHERE Username = "+ mysql.escape(user);
+                                    mysql.query(sql,pro,(err,result)=>{
+                                        if(err) throw err;
+                                        console.log('Yay');
+                                        
+                                    });
+                                    res.redirect('profile_info');
+
                                 }
                             });
+                            
+                           
+
+                           
                         }
                         else {
                             //return res.status(401).send({ "message": "A `zip code` is required" });
@@ -210,29 +258,29 @@ app.post('/add-profile', (req,res) => {
 
 });
 
-//Profile info
+
+
 app.post('/info_profile', (req, res)=> {
-    let sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.Username);
-    let query = mysql.query(sql, (err, results) => {
-        info = {
-            Username: req.session.Username,
-            Fullname: req.session.Fullname,
-            Address1: req.session.Address1,
-            Address2: req.session.Address2,
-            City: req.session.City,
-            State: req.session.State,
-            ZipCode: req.session.Zipcode
-        };
-        sql = 'INSERT INTO Profile SET ?';
-        query = mysql.query(sql, quote, (err, result) => {
-            if(err) throw err;
-            res.redirect('/profile');
-        });
+    res.redirect('profile');
+    // let sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.Username);
+    // let query = mysql.query(sql, (err, results) => {
+    //     info = {
+    //         Username: req.session.Username,
+    //         Fullname: req.session.Fullname,
+    //         Address1: req.session.Address1,
+    //         Address2: req.session.Address2,
+    //         City: req.session.City,
+    //         State: req.session.State,
+    //         ZipCode: req.session.Zipcode
+    //     };
+    //     sql = 'INSERT INTO Profile SET ?';
+    //     query = mysql.query(sql, quote, (err, result) => {
+    //         if(err) throw err;
+    //         res.redirect('/profile');
+    //     });
 
-    });
+    // });
 });
-
-
 
     //quote post
     app.post('/add-quote', (req, res) => {
@@ -291,6 +339,7 @@ app.post('/info_profile', (req, res)=> {
                 SuggestedPrice: (req.session.total/req.session.Gallons),
                 Total: req.session.total    
                 };
+                console.log(`This is the suggested price from the finalize quote: ${req.session.total/req.session.Gallons}`);
                 sql = 'INSERT INTO QuoteHistory SET ?';
         query = mysql.query(sql, quote, (err, result) => {
         if(err) throw err;
@@ -376,9 +425,10 @@ function formula(Gallons, State, result) {//formula for get quote page
     console.log(rateHistory); 
 
     margin = currentPrice * (locationFactor - rateHistory + gallonsRequested + companyProfit);
-    console.log(margin);
+    console.log('This is the formula function section');
+    console.log(`Margin Price is: ${margin}`);
     suggestPrice = currentPrice + margin;
-    console.log(suggestPrice);
+    console.log(`Suggested Price is: ${suggestPrice}`);
 
     totalAmount = Gallons * suggestPrice;
     console.log(totalAmount);    
