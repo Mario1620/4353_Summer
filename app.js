@@ -52,11 +52,25 @@ app.get('/finalize_quote', (req,res)=>{
 
     //login
 app.get('/login', (req,res) => {
-    res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username});
+    if(req.query.login == "failed") {
+        res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username, login: "Username or password is incorrect"});
+    }
+    else 
+        res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username, login: ""});
 });
     //register
 app.get('/register', (req,res) => {
-    res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username });
+    if(req.query.error == "match") {
+        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Passwords do not match or not 8 characters or more" });
+    }
+    else if (req.query.error == "user") {
+        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Username is already taken" });
+    }
+    else if (req.query.error == "invaliduser") {
+        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Username must 8 characters or more" });
+    }
+    else 
+        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "" });
 });
 
 app.get('/logout', (req,res)=>{
@@ -125,7 +139,13 @@ app.get('/quote_history', (req,res) => {
         }
         else{
             resultArray = result;
-            res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray });
+
+            if(req.query.quote == "created")
+            {
+                res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray, message: "Quote created successfully" });
+            }
+            else
+                res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray, message: "" });
         }
     });
     
@@ -343,7 +363,7 @@ app.post('/info_profile', (req, res)=> {
                 sql = 'INSERT INTO QuoteHistory SET ?';
         query = mysql.query(sql, quote, (err, result) => {
         if(err) throw err;
-        res.redirect('/quote_history');
+        res.redirect('/quote_history?quote=created');
         }); 
         });
         
@@ -451,7 +471,7 @@ app.post('/get-login', (req,res)=>{
             var hash = result[0].Password;
          //check to see if Password given hashes to the Password in the DB for this User
          bcrypt.compare(userGivenPassword, hash, (err, match)=> {
-            if(!match) res.redirect('login');//Passwords do NOT a MATCH
+            if(!match) res.redirect('login?login=failed');//Passwords do NOT a MATCH
                 
             else{ //Passwords do MATCH, continue with login process
             //store SESSION variables
@@ -471,7 +491,7 @@ app.post('/get-login', (req,res)=>{
         });
     }
         else{ // if userGivenUsername is no good
-            res.redirect('login');
+            res.redirect('login?login=failed');
         }
     });
 });
@@ -516,17 +536,17 @@ app.post('/add-user', (req,res)=>{
                 }
                 else{ //Username is taken
                     
-                    res.redirect('register');
+                    res.redirect('register?error=user');
                 }
 
             });
         }
         else{ //password issue
-            res.redirect('register');
+            res.redirect('register?error=match');
         }
     }
     else{ //Username issue
-        res.redirect('register');
+        res.redirect('register?error=invaliduser');
     }
     
 

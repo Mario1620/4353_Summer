@@ -13,6 +13,7 @@
         <div class = "box">
             <h1>Register</h1>
             <form action = "/add-user" method = "POST">
+                <p style="color: red"><%=error%></p>
                 <div class = "form-group">
                     <label for = "Username"> Username</label>
                     <input type="text" name="Username" id="Username" placeholder="Enter your Username" required>
