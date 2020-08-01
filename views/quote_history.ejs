@@ -16,7 +16,6 @@
         <% if(quotes === undefined)
         { %>
             <p>Nothing to display</p>
-
        <% } %>
        <% if(quotes !== undefined) { %>
         <table>
@@ -29,7 +28,6 @@
             <th>Delivery Date</th>
             <th>Delivery Address</th>
             <th>Total Cost</th>
-
             </tr>
             <% for(var i =0; i < quotes.length; i++) { 
                 var requestDate = quotes[i].RequestDate.toString();
@@ -46,10 +44,8 @@
                 <td> <%= quotes[i].Address %> </td>
                 <td> <%= quotes[i].Total %> </td>
             </tr>
-
             <% } %>
         </table>
-
         <% } %> 
     
 </div>
