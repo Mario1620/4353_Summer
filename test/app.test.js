@@ -37,6 +37,14 @@ describe('app', ()=>{
             request(app)
             .get('/quote_history').expect(200).end(done);
         });
+        it('Finalize Quote Should return 200 Status', function(done){
+            request(app)
+            .get('/finalize_quote').expect(200).end(done);
+        });
+        it('Profile Page should return 200 Status', function(done){
+            request(app)
+            .get('profile_info').expect(200).end(done);
+        });
     });
 
     //Mario's test section
