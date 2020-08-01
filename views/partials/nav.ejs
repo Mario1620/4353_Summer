@@ -17,12 +17,13 @@
                 if(loggedin){ %>
                     <li><a href="/quote">Get Quote</a></li>
                     <li><a href= "/quote_history">Quote History</a></li>
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/profile_info">Profile Information</a></li>
+                    <li><a href="/profile_info">Profile</a></li>
                     <li id = "logout"><a href="/logout">Logout</a></li>
                <% } 
                 else{ %>
                     <li id = "login"><a href="/login">Login</a></li>
+                    <li><a href="/profile">Profile</a></li>
+
                     <li><a href="/register">Sign up</a></li>
                <% }
             %>
