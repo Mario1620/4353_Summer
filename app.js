@@ -26,52 +26,45 @@ app.use(session({
     //index
 
 app.get('/', (req,res) => {
-    res.render('index', { page: 'Home', loggedin: req.session.loggedin, User: req.session.Username});
+    res.render('index', { page: 'Home', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname});
 });
 
     //quote
 app.get('/quote', (req,res) => {
-    var address;
-    var sql = 'SELECT * FROM Profile WHERE Username = ?';
-    mysql.query(sql, req.session.Username, (err, result)=>{
-        address = result[0].Address1;
-        var city = result[0].City;
-        var state = result[0].State;
-        var zip = result[0].ZipCode;
-        address = address+" "+city+" "+state+" "+zip;
-        console.log(address);
-        res.render('quote', { page: 'Get Quote', loggedin: req.session.loggedin, User: req.session.Username, Address: address });
-    });
+    var address = req.session.Address1+ " "+ req.session.City+" "+req.session.State+" "+req.session.ZipCode;
+    console.log(address);
+    res.render('quote', { page: 'Get Quote', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, Address: address });
+    
     
 });
 app.get('/finalize_quote', (req,res)=>{
-    res.render('finalize_quote', {page: 'Confirm Quote', loggedin: req.session.loggedin, User: req.session.Username, Gallons: req.session.Gallons, Address: req.session.Address,
+    res.render('finalize_quote', {page: 'Confirm Quote', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, Gallons: req.session.Gallons, Address: req.session.Address,
      DeliveryDate: req.session.deliveryDate, State: req.session.state, Total: req.session.total, SuggestedPrice: (req.session.total/req.session.Gallons)});
 });
 
 
     //login
-app.get('/login', (req,res) => {
-    if(req.query.login == "failed") {
-        res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username, login: "Username or password is incorrect"});
-    }
-    else 
-        res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username, login: ""});
-});
-    //register
-app.get('/register', (req,res) => {
-    if(req.query.error == "match") {
-        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Passwords do not match or not 8 characters or more" });
-    }
-    else if (req.query.error == "user") {
-        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Username is already taken" });
-    }
-    else if (req.query.error == "invaliduser") {
-        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "Username must 8 characters or more" });
-    }
-    else 
-        res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, error: "" });
-});
+    app.get('/login', (req,res) => {
+        if(req.query.login == "failed") {
+            res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username,Fullname: req.session.Fullname, login: "Username or password is incorrect"});
+        }
+        else 
+            res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname,login: ""});
+    });
+        //register
+    app.get('/register', (req,res) => {
+        if(req.query.error == "match") {
+            res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, error: "Passwords do not match or not 8 characters or more" });
+        }
+        else if (req.query.error == "user") {
+            res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname,  error: "Username is already taken" });
+        }
+        else if (req.query.error == "invaliduser") {
+            res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, error: "Username must 8 characters or more" });
+        }
+        else 
+            res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, error: "" });
+    });
 
 app.get('/logout', (req,res)=>{
    req.session.destroy();
@@ -80,31 +73,23 @@ app.get('/logout', (req,res)=>{
 
 
 
-    //profile
-/*app.get('/profile', (req,res) => {
-    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username });
-}); */
+
 
 //profile
 app.get('/profile', (req,res) => {
     var sql = 'SELECT * FROM Profile WHERE Username = ?';
     mysql.query(sql, req.session.Username, (err, result)=>{
         console.log(req.session.Username);
-        if(result.length === 0)
+        if(result === undefined)
         {
             res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname:undefined });
         
         }
         else{
             console.log("Yes");
-            var name = result[0].Fullname;
-        var address1 = result[0].Address1;
-        var address2 = result[0].Address2;
-        var city = result[0].City;
-        var state = result[0].State;
-        var zip = result[0].ZipCode;
-    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, Address1: address1, 
-    Address2: address2, City: city, State: state, ZipCode: zip});
+           
+    res.render('profile', { page: 'Profile', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, Address1: req.session.Address1, 
+    Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.ZipCode});
             
         }
     });
@@ -113,56 +98,42 @@ app.get('/profile', (req,res) => {
 
     //profile information
 app.get('/profile_info', (req,res) => {
-    var sql = 'SELECT * FROM Profile WHERE Username = ?';
-    mysql.query(sql, req.session.Username, (err, result)=>{
-        var name = result[0].Fullname;
-        var address1 = result[0].Address1;
-        var address2 = result[0].Address2;
-        var city = result[0].City;
-        var state = result[0].State;
-        var zip = result[0].ZipCode;
-        res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: name, Address1: address1, 
-        Address2: address2, City: city, State: state, ZipCode: zip});
-    });
+    
+    
+    res.render('profile_info', { page: 'Profile Information', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, Address1: req.session.Address1, 
+    Address2: req.session.Address2, City: req.session.City, State: req.session.State, ZipCode: req.session.ZipCode});
+    
 });
 
     //quote history
-app.get('/quote_history', (req,res) => {
-    var resultArray;
-    var sql = 'SELECT * FROM QuoteHistory WHERE Username = ?';
-    mysql.query(sql, req.session.Username, (err, result)=>{
-        if(err) throw err;
-        console.log(result);
-        if(result.length === 0)
-        {
-            res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: undefined });
-        }
-        else{
-            resultArray = result;
-
-            if(req.query.quote == "created")
+    app.get('/quote_history', (req,res) => {
+        var resultArray;
+        var sql = 'SELECT * FROM QuoteHistory WHERE Username = ?';
+        mysql.query(sql, req.session.Username, (err, result)=>{
+            if(err) throw err;
+            console.log(result);
+            if(result.length === 0)
             {
-                res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray, message: "Quote created successfully" });
+                res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, quotes: undefined });
             }
-            else
-                res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, quotes: resultArray, message: "" });
-        }
-    });
+            else{
+                resultArray = result;
     
-});
+                if(req.query.quote == "created")
+                {
+                    res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, quotes: resultArray, message: "Quote created successfully" });
+                }
+                else
+                    res.render('quote_history', { page: 'Quote History', loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, quotes: resultArray, message: "" });
+            }
+        });
+        
+    });
 
     //profile post
 app.post('/add-profile', (req,res) => {
     console.log(1);
-    /*Full Name (50 characters, required)
-	- Address 1 (100 characters, required)
-	- Address 2 (100 characters, optional)
-	- City (100 characters, required)
-	- State (Drop Down, selection required) DB will store 2 character state code
-    - Zipcode (9 characters, at least 5 character code required) min is 5, max is 9 */
-
-    //const profile_info = [{fullname: 'Ruth Soto', address1: '123 Smith St.', address2: '456 Main St.', city: 'Houston', state: 'TX', zipcode: 77123}]
-    //const profile_info = [{fullname: 'Mario Villareal', address1: '123 Smith St.', address2: '', city: 'Houston', state: 'TX', zip: '77123'}, {fullname: 'Steven Khong', address1: '456 Main St.', address2: '', city: 'Dallas', state: 'TX', zip: '74783'}, {fullname: 'Ruth Soto', address1: '783 Sam Rd.', address2: '', city: 'Austin', state: 'TX', zip: '72893'}]
+    
 
     const num = /\d/;
     var words = /^[a-zA-Z ]*$/;
@@ -193,7 +164,7 @@ app.post('/add-profile', (req,res) => {
 				            
                             var sql = "SELECT * FROM Profile WHERE Username = ?";
                             mysql.query(sql, req.session.Username, (err,result)=>{
-                                if(result.length === 0){ //user submitting form for first time
+                                if(result === undefined){ //user submitting form for first time
                                     var sql_profile = "INSERT INTO Profile SET ?";
                                     var pro = ({
                                         "Username": user,
@@ -205,12 +176,15 @@ app.post('/add-profile', (req,res) => {
                                         "ZipCode": zip
                                     });
                                     var query = mysql.query(sql_profile, pro, (err, result) => {
-                                        if (err) { //error
-                                            //res.redirect('/profile');
-                                            throw err;
-                                            //console.log("error");
-                                        }
+                                        if (err)  throw err;
                                         else {
+                                            req.session.Fullname = full;
+                                            req.session.Address1 = add1;
+                                            req.session.Address2 = add2;
+                                            req.session.City = city1;
+                                            req.session.State =  state1;
+                                            req.session.ZipCode = zip;
+                                
                                             var query = "UPDATE Users SET Status = 'Old' WHERE Username = " + mysql.escape(user);
                                             mysql.query(query, req.session.Username, (err, result)=>{
                                                 if(err) throw err;
@@ -236,6 +210,12 @@ app.post('/add-profile', (req,res) => {
                                     mysql.query(sql,pro,(err,result)=>{
                                         if(err) throw err;
                                         console.log('Yay');
+                                        req.session.Fullname = full;
+                                            req.session.Address1 = add1;
+                                            req.session.Address2 = add2;
+                                            req.session.City = city1;
+                                            req.session.State =  state1;
+                                            req.session.ZipCode = zip;
                                         
                                     });
                                     res.redirect('profile_info');
@@ -345,7 +325,7 @@ app.post('/info_profile', (req, res)=> {
     
 
 
-    app.post('/finalizequote', (req,res)=>{
+    app.post('/submit_quote', (req,res)=>{
         var sql = "SELECT * FROM Profile WHERE Username = " + mysql.escape(req.body.quoteUser);
         mysql.query(sql, (err,result)=>{
             if(err) throw err;
@@ -471,7 +451,7 @@ app.post('/get-login', (req,res)=>{
             var hash = result[0].Password;
          //check to see if Password given hashes to the Password in the DB for this User
          bcrypt.compare(userGivenPassword, hash, (err, match)=> {
-            if(!match) res.redirect('login?login=failed');//Passwords do NOT a MATCH
+            if(!match)res.redirect('login?login=failed');//Passwords do NOT a MATCH
                 
             else{ //Passwords do MATCH, continue with login process
             //store SESSION variables
@@ -479,11 +459,34 @@ app.post('/get-login', (req,res)=>{
                 req.session.loggedin = true;
 
                 if(result[0].Status === 'New'){
+                    
+                    req.session.Fullname = undefined;
+                    req.session.Address1 = undefined;
+                    req.session.Address2 = undefined;
+                    req.session.City = undefined;
+                    req.session.State = undefined;
+                    req.session.ZipCode = undefined;
                     res.redirect('profile');
 
                 }
                 else{
-                    res.redirect('/');
+                    var sql = "SELECT * FROM Profile WHERE Username = "+mysql.escape(req.session.Username);
+                    mysql.query(sql, (err,result)=>{
+                        req.session.Fullname = result[0].Fullname;
+                        req.session.Address1 = result[0].Address1;
+                        req.session.Address2 = result[0].Address2;
+                        req.session.City = result[0].City;
+                        req.session.State = result[0].State;
+                        req.session.ZipCode = result[0].ZipCode;
+                        console.log(req.session.Fullname);
+                        console.log(req.session.Address1);
+                        console.log(req.session.Address2);
+                        console.log(req.session.City);
+                        console.log(req.session.State);
+                        console.log(req.session.ZipCode);
+                        res.redirect('/');
+                    });
+                    
 
                 }
 
