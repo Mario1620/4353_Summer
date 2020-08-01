@@ -43,7 +43,7 @@ describe('app', ()=>{
         });
         it('Profile Page should return 200 Status', function(done){
             request(app)
-            .get('profile_info').expect(200).end(done);
+            .get('/profile_info').expect(200).end(done);
         });
     });
 
@@ -79,9 +79,9 @@ describe('app', ()=>{
     });
 
     describe('Register', function(){
-        /*it('Register GET request should return 200', function(done){
+        it('Register GET request should return 200', function(done){
             request(app).get('/register').expect(200).end(done);
-        });*/
+        });
         //This test needs to be updated every time with a new user that doesnt exists
         it('Register POST should add a new user', function(done){
             request(app).post('/add-user').type('form').send({Username: 'Testingx1', Password: 'Password01', ConfirmPassword: 'Password01'})
@@ -201,10 +201,16 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'test12384', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
+            .send({Username: 'Testing10', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
             .expect(/\//)
             .end(done);
         });
+        // it('profile form should redirect to profile page', function(done){
+        //     request(app).post('/info_profile').type('form').send({Username: 'Steven123'}).then(function(){
+        //         request(app).post('/add-profile')
+        //         .send({Username: 'RuthE123', Fullname:'Ruth E Soto', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: 'TX', zipcode: 77}).expect(/profile_info/).end(done);
+        //     });
+        //});
 
     });
   
@@ -217,7 +223,7 @@ describe('app', ()=>{
             .post('/add-quote')
             .type('form')
             .send({quantity: 23, address: "1234 Street", delivery: '2020-03-23', quoteUser: "Mario123"})
-            .expect(/quote_history/)
+            .expect(/finalize_quote/)
             .end(done);
         });
         //bad quantity
@@ -238,7 +244,14 @@ describe('app', ()=>{
             .expect(/quote/)
             .end(done);
         });
-
+        it('Finalize quote should take you to Quote History', function(done){
+            request(app)
+            .post('/submit_quote').expect(/quote_history/).end(done);
+        });
+        it('Finalize quote Cancel button should take you to Quote', function(done){
+            request(app)
+            .post('/submit_quote').expect(/quote/).end(done);
+        });
     });
 });
   
