@@ -33,10 +33,10 @@ describe('app', ()=>{
             request(app)
             .get('/profile').expect(200).end(done);
         });
-        it('Quote History should return 200 Status', function(done){
-            request(app)
-            .get('/quote_history').expect(200).end(done);
-        });
+         it('Quote History should return 200 Status', function(done){
+             request(app)
+             .get('/quote_history').expect(200).end(done);
+         });
         it('Finalize Quote Should return 200 Status', function(done){
             request(app)
             .get('/finalize_quote').expect(200).end(done);
@@ -62,16 +62,19 @@ describe('app', ()=>{
             });
         });
      
-        it('login POST should not accept wrong input', function(done){
-            request(app).post('/get-login').type('form')
-            .send({Username: 'Wrong', Password: 'Input'}).expect(/login/).end(done);
+    it('login POST should not accept wrong input', function(done){
+        request(app).post('/get-login').type('form')
+        .send({Username: 'Wrong', Password: 'Input'}).expect(/login/).end(done);
+        
+           
         });
 
-        it('login POST should accept good input and send to profile if Status == New', function(done){
-            request(app).post('/get-login').type('form')
-            .send({Username: 'Testing123', Password: 'Password01'}).expect(/profile/, done);
+    it('login POST should accept good input and send to profile if Status == New', function(done){
+        request(app).post('/get-login').type('form').send({Username: 'Testing123', Password: 'Password01'})
         
-        });
+            .expect(/profile/, done);
+        
+    });
 
     });
 
@@ -123,6 +126,8 @@ describe('app', ()=>{
 
             request(app).get('/logout').expect(302).end(done);
         });
+
+       
     }); 
   
   
@@ -198,16 +203,18 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'Testing10', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
+            .send({Username: 'Testing16', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
             .expect(/\//)
             .end(done);
         });
-        // it('profile form should redirect to profile page', function(done){
-        //     request(app).post('/info_profile').type('form').send({Username: 'Steven123'}).then(function(){
-        //         request(app).post('/add-profile')
-        //         .send({Username: 'RuthE123', Fullname:'Ruth E Soto', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: 'TX', zipcode: 77}).expect(/profile_info/).end(done);
-        //     });
-        //});
+          it('profile form should redirect to profile page', function(done){
+             
+                 request(app).post('/add-profile').type('form')
+                 .send({ Fullname:'Ruth E Soto', Address1: '123 Smith St.', Address2: '', city: 'Houston', states: 'TX', zipcode: 77123}).expect(/profile_info/).end(done);
+             
+                
+            
+        });
 
     });
   
@@ -241,13 +248,25 @@ describe('app', ()=>{
             .expect(/quote/)
             .end(done);
         });
+
+        it('quote history should display nothing if no history', function(done){
+            request(app).post('/get-login').type('form').send({Username: 'Testing1', Password: 'Password1'})
+            .then(function(){
+                request(app).get('/quote_history').expect(/Nothing/).end(done);
+            });
+        });
+
         it('Finalize quote should take you to Quote History', function(done){
             request(app)
-            .post('/submit_quote').expect(/quote_history/).end(done);
+            .post('/submit_quote').type('form')
+
+             .send({Gallons: 1500, RequestDate: '2020-09-21', DeliveryDate: '2020-09-22', Address: '123 Fake St.', State: 'TX', 
+             Username:'Mario123', SuggestedPrice: 1.69, Total: 26.00})
+            .expect(/quote_history/).end(done);
         });
         it('Finalize quote Cancel button should take you to Quote', function(done){
             request(app)
-            .post('/submit_quote').expect(/quote/).end(done);
+            .post('/cancel_quote').expect(/quote/).end(done);
         });
     });
 });
