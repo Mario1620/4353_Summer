@@ -62,19 +62,16 @@ describe('app', ()=>{
             });
         });
      
-    it('login POST should not accept wrong input', function(done){
-        request(app).post('/get-login').type('form')
-        .send({Username: 'Wrong', Password: 'Input'}).expect(/login/).end(done);
-        
-           
+        it('login POST should not accept wrong input', function(done){
+            request(app).post('/get-login').type('form')
+            .send({Username: 'Wrong', Password: 'Input'}).expect(/login/).end(done);
         });
 
-    it('login POST should accept good input and send to profile if Status == New', function(done){
-        request(app).post('/get-login').type('form').send({Username: 'Testing123', Password: 'Password01'})
+        it('login POST should accept good input and send to profile if Status == New', function(done){
+            request(app).post('/get-login').type('form')
+            .send({Username: 'Testing123', Password: 'Password01'}).expect(/profile/, done);
         
-            .expect(/profile/, done);
-        
-    });
+        });
 
     });
 

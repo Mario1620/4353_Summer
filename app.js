@@ -45,7 +45,7 @@ app.get('/finalize_quote', (req,res)=>{
 
     //login
     app.get('/login', (req,res) => {
-        if(req.query.login == "failed") {
+        if(req.query.login === "failed") {
             res.render('login', { page: 'Login', loggedin: req.session.loggedin, User: req.session.Username,Fullname: req.session.Fullname, login: "Username or password is incorrect"});
         }
         else 
@@ -53,13 +53,13 @@ app.get('/finalize_quote', (req,res)=>{
     });
         //register
     app.get('/register', (req,res) => {
-        if(req.query.error == "match") {
+        if(req.query.error === "match") {
             res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, error: "Passwords do not match or not 8 characters or more" });
         }
-        else if (req.query.error == "user") {
+        else if (req.query.error === "user") {
             res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname,  error: "Username is already taken" });
         }
-        else if (req.query.error == "invaliduser") {
+        else if (req.query.error === "invaliduser") {
             res.render('register', { page: 'Sign Up' , loggedin: req.session.loggedin, User: req.session.Username, Fullname: req.session.Fullname, error: "Username must 8 characters or more" });
         }
         else 
@@ -451,8 +451,9 @@ app.post('/get-login', (req,res)=>{
             var hash = result[0].Password;
          //check to see if Password given hashes to the Password in the DB for this User
          bcrypt.compare(userGivenPassword, hash, (err, match)=> {
-            if(!match)res.redirect('login?login=failed');//Passwords do NOT a MATCH
-                
+            if(!match) {
+                res.redirect('login?login=failed');//Passwords do NOT a MATCH
+            }
             else{ //Passwords do MATCH, continue with login process
             //store SESSION variables
                 req.session.Username = userGivenUsername;
