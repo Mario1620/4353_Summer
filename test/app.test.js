@@ -203,7 +203,7 @@ describe('app', ()=>{
             request(app)
             .post('/add-profile')
             .type('form')
-            .send({Username: 'Testing16', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
+            .send({Username: 'Testing5', fullname: 'Jane Doe', Address1: '456 Bourbon St,', Address2: '', city: 'New Orleans', states: 'LA', zipcode: 77098})
             .expect(/\//)
             .end(done);
         });
@@ -214,6 +214,9 @@ describe('app', ()=>{
              
                 
             
+        });
+        it('profile cancel button should take you to home page', function(done){
+            request(app).post('/cancel_profile_edit').expect(/MSRFuel/).end(done);
         });
 
     });
@@ -249,12 +252,7 @@ describe('app', ()=>{
             .end(done);
         });
 
-        it('quote history should display nothing if no history', function(done){
-            request(app).post('/get-login').type('form').send({Username: 'Testing1', Password: 'Password1'})
-            .then(function(){
-                request(app).get('/quote_history').expect(/Nothing/).end(done);
-            });
-        });
+       
 
         it('Finalize quote should take you to Quote History', function(done){
             request(app)
